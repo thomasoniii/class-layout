@@ -1,0 +1,92 @@
+.App {
+  //text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 60px;
+  padding: 15px;
+  color: white;
+  text-align : center;
+}
+
+h2 {
+  margin : 0px !important;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+textarea {
+  //float : left
+}
+
+button {
+  //clear : both
+}
+
+td, th {
+  border : 1px solid black;
+  padding : 0px;
+  margin : 0px;
+}
+
+td:nth-child(4) > table {
+  border-left : 4px solid black;
+}
+
+td:nth-child(11) > table {
+  border-left : 4px solid black;
+}
+
+th {
+  font-size : 250%;
+  text-align : left
+}
+
+td.blank {
+  border : 0px;
+  width : 100px;
+}
+
+td.underline {
+  border : 0px;
+  border-bottom : 1px solid black;
+}
+
+table {
+  border-spacing : 0px;
+  border-collapse : collapse;
+}
+
+table.layoutTable {
+  margin-top : 45px;
+}
+
+td.name {
+  width : 100px;
+  height : 110px;
+  text-align : center;
+}
+
+td.grade {
+  height : 25px
+}
+
+body {
+  padding : 0px;
+  margin : 0px;
+}
+
+@media print {
+  #config {
+    display : none;
+  }
+
+}
