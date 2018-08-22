@@ -13,7 +13,7 @@ import Student from './Student';
 
 import './App.css';
 
-const CELLS_PER_SIDE = 6;
+const CELLS_PER_SIDE = 7;
 
 class App extends Component {
 
@@ -142,12 +142,6 @@ class App extends Component {
       output.push( this.renderCell(i >= students.length ? null : students[i], i + offset) );
     }
 
-    output.push( <td className='blank' key='blank'></td> );
-
-    for (let i = CELLS_PER_SIDE; i < CELLS_PER_SIDE * 2; i++) {
-      output.push( this.renderCell(i >= students.length ? null : students[i], i + offset) );
-    }
-
     return <tr>{output}</tr>;
   }
 
@@ -234,12 +228,12 @@ class App extends Component {
         <table className='layoutTable'>
           <tbody>
             <tr>
-              <th colSpan = '6' style={{borderRight : '0px'}}>Class: <span style={{fontSize : '70%'}}>{ this.state.class_name }</span></th><th style={{borderLeft : '0px'}} colSpan = '7'>Time/Days: <span style={{fontSize : '65%', whiteSpace : 'pre'}}>{ this.state.date_time }</span></th>
+              <th colSpan = '4' style={{borderRight : '0px'}}>Class: <span style={{fontSize : '70%'}}>{ this.state.class_name }</span></th>
+              <th style={{borderLeft : '0px'}} colSpan = '3'>Time/Days: <span style={{fontSize : '65%', whiteSpace : 'pre'}}>{ this.state.date_time }</span></th>
             </tr>
             <tr><td className='blank'>&nbsp;</td></tr>
 
             { this.renderRow( this.state.students.slice(CELLS_PER_SIDE * 4, CELLS_PER_SIDE * 6), CELLS_PER_SIDE * 4) }
-
             <tr><td className='blank' style={{height : '15px'}}></td></tr>
 
             { this.renderRow( this.state.students.slice(CELLS_PER_SIDE * 2, CELLS_PER_SIDE * 4), CELLS_PER_SIDE * 2) }
@@ -248,24 +242,17 @@ class App extends Component {
             { this.renderRow( this.state.students.slice(0, CELLS_PER_SIDE * 2), 0) }
             <tr><td className='blank' style={{height : '15px'}}></td></tr>
 
-            <tr>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-              <td className='blank' colSpan = '2'>&nbsp;</td>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-              <td className='blank'>&nbsp;</td>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-              <td className='blank' colSpan = '2'>&nbsp;</td>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-            </tr>
-            <tr>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-              <td className='blank' colSpan = '2'>&nbsp;</td>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-              <td className='blank'>&nbsp;</td>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-              <td className='blank' colSpan = '2'>&nbsp;</td>
-              <td colSpan = '2' className='underline'>&nbsp;</td>
-            </tr>
+            { this.renderRow( this.state.students.slice(0, CELLS_PER_SIDE * 2), 0) }
+            <tr><td className='blank' style={{height : '15px'}}></td></tr>
+
+            {[0,1,2,3,4].map( () => (
+              <tr>
+                <td colSpan = '3' className='underline'>&nbsp;</td>
+                <td colSpan = '1' className='blank'>&nbsp;</td>
+                <td colSpan = '3' className='underline'>&nbsp;</td>
+              </tr>
+            ))}
+
           </tbody>
         </table>
       </div>

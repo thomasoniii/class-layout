@@ -56,25 +56,29 @@ class Student extends Component {
       <td className='blank' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : 'move', border : isOver && canDrop ? '4px solid green' : '' }}>
         <table>
           <tbody>
-          <tr>
-            <td className='name' colSpan = '5'>
-              { student[0] }
-            </td>
-          </tr>
-          <tr>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-          </tr>
-          <tr>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-            <td className='grade'>&nbsp;</td>
-          </tr>
+            <tr>
+              <td className='name' rowSpan = '5'>
+                { student[0] }
+              </td>
+              <td className='grade'>&nbsp;</td>
+              <td className='grade'>&nbsp;</td>
+            </tr>
+            <tr>
+              <td className='grade'>&nbsp;</td>
+              <td className='grade'>&nbsp;</td>
+            </tr>
+            <tr>
+              <td className='grade'>&nbsp;</td>
+              <td className='grade'>&nbsp;</td>
+            </tr>
+            <tr>
+              <td className='grade'>&nbsp;</td>
+              <td className='grade'>&nbsp;</td>
+            </tr>
+            <tr>
+              <td className='grade'>&nbsp;</td>
+              <td className='grade'>&nbsp;</td>
+            </tr>
           </tbody>
         </table>
       </td>

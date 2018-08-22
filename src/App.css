@@ -37,14 +37,6 @@ td, th {
   margin : 0px;
 }
 
-td:nth-child(4) > table {
-  border-left : 4px solid black;
-}
-
-td:nth-child(11) > table {
-  border-left : 4px solid black;
-}
-
 th {
   font-size : 250%;
   text-align : left
@@ -52,7 +44,7 @@ th {
 
 td.blank {
   border : 0px;
-  width : 100px;
+  width : 14%;
 }
 
 td.underline {
@@ -67,16 +59,19 @@ table {
 
 table.layoutTable {
   margin-top : 45px;
+  width : 100%;
+  box-sizing: border-box;
+  //border : 2px solid red;
 }
 
 td.name {
   width : 100px;
-  height : 110px;
+  height : 100px;
   text-align : center;
 }
 
 td.grade {
-  height : 25px
+  width : 20px;
 }
 
 body {
