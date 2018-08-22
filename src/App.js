@@ -83,14 +83,14 @@ class App extends Component {
       students = students.filter(s => s[0]);
       students = _.shuffle(students);
     }
-console.log("STUD 1", students);
+
     const list = students
       //.filter(s => s.length > 1 && s[0].length)
       .map(s => s.join(';')) //${s[0] || ''};${s[1] || ''}`)
       .join("\n")
       .replace(/\n\n+$/, '')
     ;
-console.log("STUDENTS, LIST", students, list);
+
     this.setState({ students, list });
   }
 
@@ -111,7 +111,6 @@ console.log("STUDENTS, LIST", students, list);
   }
 
   moveStudent(movingStudent, targetStudent, to, from) {
-    console.log("MOVES ", movingStudent, to, from);
     let students = this.state.list.split(/\r?\n/);
     while (to > students.length) {
       students.push([]);
