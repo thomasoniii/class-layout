@@ -6,12 +6,13 @@
   "prhomepage": "http://prototypesite.net/class-layout",
   "devDependencies": {
     "gh-pages": "^1.2.0",
-    "react-scripts": "1.0.11"
+    "react-scripts": "^1.1.4"
   },
   "dependencies": {
+    "ajv": "^6.5.3",
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.10",
     "react": "^15.6.1",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
@@ -26,6 +27,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy" : "gh-pages -d build"
+    "deploy": "gh-pages -d build"
   }
 }
