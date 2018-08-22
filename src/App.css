@@ -18,62 +18,6 @@ h2 {
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-textarea {
-  //float : left
-}
-
-button {
-  //clear : both
-}
-
-td, th {
-  border : 1px solid black;
-  padding : 0px;
-  margin : 0px;
-}
-
-th {
-  font-size : 250%;
-  text-align : left
-}
-
-td.blank {
-  border : 0px;
-  width : 14%;
-}
-
-td.underline {
-  border : 0px;
-  border-bottom : 1px solid black;
-}
-
-table {
-  border-spacing : 0px;
-  border-collapse : collapse;
-}
-
-table.layoutTable {
-  margin-top : 45px;
-  width : 100%;
-  box-sizing: border-box;
-  //border : 2px solid red;
-}
-
-td.name {
-  width : 100px;
-  height : 100px;
-  text-align : center;
-}
-
-td.grade {
-  width : 20px;
-}
-
 body {
   padding : 0px;
   margin : 0px;
@@ -84,4 +28,110 @@ body {
     display : none;
   }
 
+}
+
+.student {
+  border : 2px solid;
+  display : grid;
+  grid-template-columns : 70% 15% 15%;
+  grid-template-areas : "name grade0 grade1"
+                        "name grade2 grade3"
+                        "name grade4 grade5"
+                        "name grade6 grade7"
+                        "name grade8 grade9";
+}
+
+.name {
+  height : 130px;
+  border : 0px solid black;
+  grid-area : name;
+  //border-left : 2px solid black;
+  padding : 5px;
+}
+
+.grade, .grade0, .grade1, .grade2, .grade3, .grade4, .grade5, .grade6, .grade7, .grade8, .grade9 {
+  //height : 20px;
+  //width : 20px;
+  border : 1px solid black;
+}
+
+.grade0 { grid-area : grade0; border-top : 0px }
+.grade1 { grid-area : grade1; border-top : 0px; border-right : 0px}
+.grade2 { grid-area : grade2; }
+.grade3 { grid-area : grade3; border-right : 0px}
+.grade4 { grid-area : grade4; }
+.grade5 { grid-area : grade5; border-right : 0px}
+.grade6 { grid-area : grade6; }
+.grade7 { grid-area : grade7; border-right : 0px}
+.grade8 { grid-area : grade8; border-bottom : 0px }
+.grade9 { grid-area : grade9; border-bottom : 0px; border-right : 0px }
+
+.headerGrid {
+  display : grid;
+  grid-template-columns : 1fr 1fr;
+  border : 1px solid black;
+  font-size : 250%;
+  text-align : left;
+  font-weight : bold;
+  box-sizing : border-box;
+  padding-left : 5px;
+  padding-right : 5px;
+}
+
+.studentGrid {
+  display : grid;
+  grid-template-columns : repeat(7,1fr);
+  box-sizing : border-box;
+}
+
+/*.student:nth-child(-n+7) { border-color : black red red red }
+
+.student:nth-child(8),
+.student:nth-child(9),
+.student:nth-child(10),
+.student:nth-child(11),
+.student:nth-child(12),
+.student:nth-child(13),
+.student:nth-child(14) {
+  border-color : red yellow yellow yellow;
+}*/
+
+.student-container:nth-child(7n) .student {
+    border : 2px solid gray;
+    border-left : 0px;
+}
+
+.student-container:nth-child(7n) .grade0,
+.student-container:nth-child(7n) .grade1,
+.student-container:nth-child(7n) .grade2,
+.student-container:nth-child(7n) .grade3,
+.student-container:nth-child(7n) .grade4,
+.student-container:nth-child(7n) .grade5,
+.student-container:nth-child(7n) .grade6,
+.student-container:nth-child(7n) .grade7,
+.student-container:nth-child(7n) .grade8,
+.student-container:nth-child(7n) .grade9 {
+    border : 1px solid gray;
+}
+
+.student-container:nth-child(7n) .grade0,
+.student-container:nth-child(7n) .grade1 {
+  border-top : 0px
+}
+
+.student-container:nth-child(7n) .grade8,
+.student-container:nth-child(7n) .grade9 {
+  border-bottom : 0px;
+}
+
+.assignmentsGrid {
+  display : grid;
+  grid-template-columns : 1fr 1fr;
+  grid-gap : 10%;
+  box-sizing : border-box;
+}
+
+.assignmentsGrid div {
+  border-bottom : 1px solid black;
+  height : 30px;
 }

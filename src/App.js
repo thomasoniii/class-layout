@@ -15,13 +15,14 @@ import './App.css';
 
 const CELLS_PER_SIDE = 7;
 
+
 class App extends Component {
 
   state = {
     boy_girl        : true,
     swap_students   : true,
+    color_print     : true,
     list            : '',
-    students        : [],
     class_name      : '',
     date_time       : '',
   }
@@ -37,7 +38,6 @@ class App extends Component {
             list        : this.state.list,
             boy_girl    : false,
             randomize   : false,
-            students    : this.state.students
           }
         )
       );
@@ -91,7 +91,8 @@ class App extends Component {
       .replace(/\n\n+$/, '')
     ;
 
-    this.setState({ students, list });
+
+    this.setState({ list });
   }
 
   toggle(label) {
@@ -103,46 +104,23 @@ class App extends Component {
     this.setState({[label] : value});
   }
 
-  renderCell(student, i) {
-
-    return (
-      <Student student={student ? student : []} key={i} idx={i} onMove={ this.moveStudent.bind(this) }/>
-    )
-  }
-
   moveStudent(movingStudent, targetStudent, to, from) {
-    let students = this.state.list.split(/\r?\n/);
+
+    let students = this.state.list.split(/\r?\n/).map(s => s.split(/;/));
+
     while (to > students.length) {
       students.push([]);
     }
     if (this.state.swap_students) {
-      students.splice(from, 1, targetStudent.join(';'));
-      students.splice(to, 1, movingStudent.join(';'));
+      students.splice(from, 1, targetStudent);
+      students.splice(to, 1, movingStudent);
     }
     else {
       students.splice(from, 1);
-      students.splice(to, 0, movingStudent.join(';'));
-    }
-    this.setState({ list : students.join("\n") }, this.layout);
-  }
-
-  renderRow(students, offset) {
-
-
-    if (students.length < CELLS_PER_SIDE * 2) {
-      const openSeatsLeft = Math.floor(( CELLS_PER_SIDE * 2 - students.length ) / 2);
-      for (let i = 0; i < openSeatsLeft; i++) {
-        students.unshift('');
-      }
+      students.splice(to, 0, movingStudent);
     }
 
-    let output = [];
-
-    for (let i = 0; i < CELLS_PER_SIDE; i++) {
-      output.push( this.renderCell(i >= students.length ? null : students[i], i + offset) );
-    }
-
-    return <tr>{output}</tr>;
+    this.setState({ list : students.map(s => s.join(';')).join("\n") }, this.layout);
   }
 
   render() {
@@ -152,6 +130,13 @@ class App extends Component {
     for (let i = 0; i < localStorage.length; i++) {
       saved_classes.push( localStorage.key(i) );
     }
+
+
+    let students = this.state.list.split(/\r?\n/).map(line => line.split(/\s*;\s*/));
+    while (students.length < 24) {
+      students.push([]);
+    }
+    students = students.slice(0,24).reverse();
 
     return (
       <div className='App'>
@@ -209,6 +194,14 @@ class App extends Component {
                       </Tipsy>
                     </div>
                   </div>
+                  <div className='form-group'>
+                    <label htmlFor='class_name' className='col-xs-2 control-label'>Color print</label>
+                    <div className='col-xs-10'>
+                      <Tipsy content='If checked, will print the rows in color' placement='bottom' trigger='hover focus touch'>
+                        <input type = 'checkbox' id='swap_students' checked={this.state.color_print} onChange={() => this.toggle('color_print')} />
+                      </Tipsy>
+                    </div>
+                  </div>
                   <div className='form-group' style={{display : 'flex', alignItems : 'center'}}>
                     <label htmlFor='class_name' className='col-xs-offset-8 col-xs-2 control-label'>
                       Girl / Boy <input type = 'checkbox' id='boy_girl' checked={this.state.boy_girl} onChange={() => this.toggle('boy_girl')} /></label>
@@ -225,36 +218,29 @@ class App extends Component {
           </div>
         </div>
 
-        <table className='layoutTable'>
-          <tbody>
-            <tr>
-              <th colSpan = '4' style={{borderRight : '0px'}}>Class: <span style={{fontSize : '70%'}}>{ this.state.class_name }</span></th>
-              <th style={{borderLeft : '0px'}} colSpan = '3'>Time/Days: <span style={{fontSize : '65%', whiteSpace : 'pre'}}>{ this.state.date_time }</span></th>
-            </tr>
-            <tr><td className='blank'>&nbsp;</td></tr>
+        <div className = 'headerGrid'>
+          <div>Class: <span style={{fontSize : '70%'}}>{ this.state.class_name }</span></div>
+          <div>Time/Days: <span style={{fontSize : '65%', whiteSpace : 'pre'}}>{ this.state.date_time }</span></div>
+        </div>
 
-            { this.renderRow( this.state.students.slice(CELLS_PER_SIDE * 4, CELLS_PER_SIDE * 6), CELLS_PER_SIDE * 4) }
-            <tr><td className='blank' style={{height : '15px'}}></td></tr>
+        <div className = 'studentGrid'>
+          { students.map( (student, i) => {
+            let output = [];
+            if ( (i && i % 6 == 0)) {
+              output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+            }
+            output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
+            if ( (i == 23)) {
+              output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+            }
+            return output;
+          })}
+        </div>
 
-            { this.renderRow( this.state.students.slice(CELLS_PER_SIDE * 2, CELLS_PER_SIDE * 4), CELLS_PER_SIDE * 2) }
-            <tr><td className='blank' style={{height : '15px'}}></td></tr>
+        <div className = 'assignmentsGrid'>
+          {[0,1,2,3,4,5,6,7,8,9].map((i) => (<div key={i}></div>))}
+        </div>
 
-            { this.renderRow( this.state.students.slice(0, CELLS_PER_SIDE * 2), 0) }
-            <tr><td className='blank' style={{height : '15px'}}></td></tr>
-
-            { this.renderRow( this.state.students.slice(0, CELLS_PER_SIDE * 2), 0) }
-            <tr><td className='blank' style={{height : '15px'}}></td></tr>
-
-            {[0,1,2,3,4].map( () => (
-              <tr>
-                <td colSpan = '3' className='underline'>&nbsp;</td>
-                <td colSpan = '1' className='blank'>&nbsp;</td>
-                <td colSpan = '3' className='underline'>&nbsp;</td>
-              </tr>
-            ))}
-
-          </tbody>
-        </table>
       </div>
     );
   }

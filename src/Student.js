@@ -8,13 +8,12 @@ const studentSource = {
     return props;
   },
   canDrag(props, monitor) {
-    return Array.isArray(props.student);
+    return Array.isArray(props.student) && props.idx !== 99;
   }
 }
 
 const studentTarget = {
   drop(props, monitor) {
-    console.log("MOVES TO ", props, " FROM ", monitor.getItem());
     monitor.getItem().onMove(
       monitor.getItem().student,
       props.student,
@@ -23,7 +22,7 @@ const studentTarget = {
     //moveStudent(props.idx);
   },
   canDrop(props, monitor) {
-    return monitor.getItem().student[0] !== props.student[0];
+    return monitor.getItem().student[0] !== props.student[0] && monitor.getItem().idx !== 99;
   }
 }
 
@@ -51,37 +50,34 @@ class Student extends Component {
     const { connectDragSource, connectDropTarget, isDragging, isOver, canDrop } = this.props;
 
     const student = this.props.student;
+    const idx     = this.props.idx;
+
+    let borderColor = '';
+
+    const rows = {
+      one   : 'blue orange orange orange',
+      two   : 'yellow blue blue blue',
+      three : 'red yellow yellow yellow',
+      four  : 'black red red red'
+    }
+
+    if (this.props.color_print) {
+           if (idx < 6)               { borderColor = rows.one   }
+      else if (idx >= 6 && idx < 12)  { borderColor = rows.two   }
+      else if (idx >= 12 && idx < 18) { borderColor = rows.three }
+      else if (idx >= 18 && idx < 24) { borderColor = rows.four  }
+    }
+    else if (idx != 99) {
+      borderColor = 'black';
+    }
 
     return connectDropTarget(connectDragSource(
-      <td className='blank' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : 'move', border : isOver && canDrop ? '4px solid green' : '' }}>
-        <table>
-          <tbody>
-            <tr>
-              <td className='name' rowSpan = '5'>
-                { student[0] }
-              </td>
-              <td className='grade'>&nbsp;</td>
-              <td className='grade'>&nbsp;</td>
-            </tr>
-            <tr>
-              <td className='grade'>&nbsp;</td>
-              <td className='grade'>&nbsp;</td>
-            </tr>
-            <tr>
-              <td className='grade'>&nbsp;</td>
-              <td className='grade'>&nbsp;</td>
-            </tr>
-            <tr>
-              <td className='grade'>&nbsp;</td>
-              <td className='grade'>&nbsp;</td>
-            </tr>
-            <tr>
-              <td className='grade'>&nbsp;</td>
-              <td className='grade'>&nbsp;</td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
+      <div className='student-container' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : idx === 99 ? '' : 'move', border : isOver && canDrop ? '4px solid green' : ''}}>
+        <div className='student' style={{ borderColor }}>
+          <div className='name'>{student[0]}</div>
+          { [0,1,2,3,4,5,6,7,8,9].map( (g) => <div className={`grade${g}`} key={g}></div>) }
+        </div>
+      </div>
     ));
   }
 
