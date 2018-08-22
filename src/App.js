@@ -150,7 +150,14 @@ class App extends Component {
               <div className='col-lg-12'>
                 <b>Instructions:</b>
                 <ol>
-                  <li>forthcoming</li>
+                  <li>Add a list of students, one student per line. Optionally may list gender after semi-colon. i.e., 'Jim Thomason' or 'Jim Thomason;M'</li>
+                  <li>As students are added, they appear on the class layout. Students at the top show up in the front rows at the bottom.</li>
+                  <li>Fill in the class name and Time/Days on the right.</li>
+                  <li>You can re-arrange students by dragging and dropping them in the interface. Drag one student onto another to move them. No need to edit the list directly!</li>
+                  <li>If the "swap students" checkbox is enabled, the students will swap. If it{"'"}s not enabled, then the student will insert before the one it is dropped on. The student dropped on will not move.</li>
+                  <li>The color print checkbox toggles coloring for color printers.</li>
+                  <li>You can randomize the layout, and optionally choose to do a boy/girl layout. Just click the randomize button.</li>
+                  <li>When you are satisfied, click the "Save" button to save it to your computer under the class name.</li>
                 </ol>
               </div>
             </div>
