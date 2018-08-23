@@ -34,37 +34,21 @@ body {
   border : 2px solid;
   display : grid;
   grid-template-columns : 70% 15% 15%;
-  grid-template-areas : "name grade0 grade1"
-                        "name grade2 grade3"
-                        "name grade4 grade5"
-                        "name grade6 grade7"
-                        "name grade8 grade9";
 }
 
 .name {
   height : 130px;
   border : 0px solid black;
-  grid-area : name;
-  //border-left : 2px solid black;
+  grid-row-start: 1;
+  grid-row-end: 6;
   padding : 5px;
 }
 
-.grade, .grade0, .grade1, .grade2, .grade3, .grade4, .grade5, .grade6, .grade7, .grade8, .grade9 {
+.grade {
   //height : 20px;
   //width : 20px;
   border : 1px solid black;
 }
-
-.grade0 { grid-area : grade0; border-top : 0px }
-.grade1 { grid-area : grade1; border-top : 0px; border-right : 0px}
-.grade2 { grid-area : grade2; }
-.grade3 { grid-area : grade3; border-right : 0px}
-.grade4 { grid-area : grade4; }
-.grade5 { grid-area : grade5; border-right : 0px}
-.grade6 { grid-area : grade6; }
-.grade7 { grid-area : grade7; border-right : 0px}
-.grade8 { grid-area : grade8; border-bottom : 0px }
-.grade9 { grid-area : grade9; border-bottom : 0px; border-right : 0px }
 
 .headerGrid {
   display : grid;
@@ -84,44 +68,39 @@ body {
   box-sizing : border-box;
 }
 
-/*.student:nth-child(-n+7) { border-color : black red red red }
-
-.student:nth-child(8),
-.student:nth-child(9),
-.student:nth-child(10),
-.student:nth-child(11),
-.student:nth-child(12),
-.student:nth-child(13),
-.student:nth-child(14) {
-  border-color : red yellow yellow yellow;
-}*/
 
 .student-container:nth-child(7n) .student {
     border : 2px solid gray;
     border-left : 0px;
+    border-right-width : 4px;
 }
 
-.student-container:nth-child(7n) .grade0,
-.student-container:nth-child(7n) .grade1,
-.student-container:nth-child(7n) .grade2,
-.student-container:nth-child(7n) .grade3,
-.student-container:nth-child(7n) .grade4,
-.student-container:nth-child(7n) .grade5,
-.student-container:nth-child(7n) .grade6,
-.student-container:nth-child(7n) .grade7,
-.student-container:nth-child(7n) .grade8,
-.student-container:nth-child(7n) .grade9 {
+.student-container:nth-child(7n-6) .student {
+    border-left-width : 4px;
+}
+
+.student-container:nth-child(7n-1) .student {
+    border-right-width : 4px;
+}
+
+.grade:nth-child(-n+3) {
+  border-top-width : 0px;
+}
+
+.grade:nth-child(2n + 1) {
+  border-right-width : 0px;
+}
+
+.grade:nth-last-child(-n+2) {
+  border-bottom-width : 0px;
+}
+
+.student-container:nth-child(7n) .grade {
     border : 1px solid gray;
 }
 
-.student-container:nth-child(7n) .grade0,
-.student-container:nth-child(7n) .grade1 {
-  border-top : 0px
-}
-
-.student-container:nth-child(7n) .grade8,
-.student-container:nth-child(7n) .grade9 {
-  border-bottom : 0px;
+.student-container:nth-last-child(-n+7) .student {
+  border-bottom-width : 4px;
 }
 
 .assignmentsGrid {

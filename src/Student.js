@@ -75,7 +75,7 @@ class Student extends Component {
       <div className='student-container' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : idx === 99 ? '' : 'move', border : isOver && canDrop ? '4px solid green' : ''}}>
         <div className='student' style={{ borderColor }}>
           <div className='name'>{student[0]}</div>
-          { [0,1,2,3,4,5,6,7,8,9].map( (g) => <div className={`grade${g}`} key={g}></div>) }
+          { [0,1,2,3,4,5,6,7,8,9].map( (g) => <div className={`grade`} key={g}></div>) }
         </div>
       </div>
     ));
