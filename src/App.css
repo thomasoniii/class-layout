@@ -84,15 +84,15 @@ body {
 }
 
 .grade:nth-child(-n+3) {
-  border-top-width : 0px;
+  border-top-width : 0px !important;
 }
 
 .grade:nth-child(2n + 1) {
-  border-right-width : 0px;
+  border-right-width : 0px !important;
 }
 
 .grade:nth-last-child(-n+2) {
-  border-bottom-width : 0px;
+  border-bottom-width : 0px !important;
 }
 
 .student-container:nth-child(7n) .grade {
