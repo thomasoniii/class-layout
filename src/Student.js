@@ -8,7 +8,7 @@ const studentSource = {
     return props;
   },
   canDrag(props, monitor) {
-    return Array.isArray(props.student) && props.idx !== 99;
+    return Array.isArray(props.student) && props.student[0] && props.idx !== 99;
   }
 }
 
@@ -22,7 +22,7 @@ const studentTarget = {
     //moveStudent(props.idx);
   },
   canDrop(props, monitor) {
-    return monitor.getItem().student[0] !== props.student[0] && monitor.getItem().idx !== 99;
+    return monitor.getItem().student[0] !== props.student[0] && props.idx !== 99;
   }
 }
 
@@ -72,7 +72,7 @@ class Student extends Component {
     }
 
     return connectDropTarget(connectDragSource(
-      <div className='student-container' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : idx === 99 ? '' : 'move', border : isOver && canDrop ? '4px solid green' : ''}}>
+      <div className='student-container' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : idx === 99 || student[0] === undefined ? '' : 'move', backgroundColor : isOver && canDrop ? 'lightgreen' : ''}}>
         <div className='student' style={{ borderColor }}>
           <div className='name'>{student[0]}</div>
           { [0,1,2,3,4,5,6,7,8,9].map( (g) => <div className={`grade`} key={g}></div>) }
