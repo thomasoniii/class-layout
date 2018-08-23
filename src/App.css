@@ -87,6 +87,10 @@ body {
   border-top-width : 0px !important;
 }
 
+.grade:nth-child(2n) {
+  border-left-width : 2px !important;
+}
+
 .grade:nth-child(2n + 1) {
   border-right-width : 0px !important;
 }
