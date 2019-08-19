@@ -55,10 +55,10 @@ class Student extends Component {
     let borderColor = '';
 
     const rows = {
-      one   : 'blue orange orange orange',
-      two   : 'yellow blue blue blue',
-      three : 'red yellow yellow yellow',
-      four  : 'black red red red'
+      one   : 'blue red red red',
+      two   : 'green blue blue blue',
+      three : 'yellow green green green',
+      four  : 'black yellow yellow yellow'
     }
 
     if (this.props.color_print) {
@@ -67,7 +67,7 @@ class Student extends Component {
       else if (idx >= 12 && idx < 18) { borderColor = rows.three }
       else if (idx >= 18 && idx < 24) { borderColor = rows.four  }
     }
-    else if (idx != 99) {
+    else if (idx !== 99) {
       borderColor = 'black';
     }
 

@@ -13,9 +13,6 @@ import Student from './Student';
 
 import './App.css';
 
-const CELLS_PER_SIDE = 7;
-
-
 class App extends Component {
 
   state = {
@@ -62,8 +59,8 @@ class App extends Component {
 
     if (this.state.boy_girl && randomize) {
       students = students.filter(s => s[0]);
-      let boys = students.filter( student => student[1].match(/^M/i));
-      let girls = students.filter( student => student[1].match(/^F/i));
+      let boys = students.filter( student => !student[1] || student[1].match(/^M/i));
+      let girls = students.filter( student => student[1] && student[1].match(/^F/i));
 
       if (randomize) {
         boys  = _.shuffle(boys);
@@ -233,11 +230,11 @@ class App extends Component {
         <div className = 'studentGrid'>
           { students.map( (student, i) => {
             let output = [];
-            if ( (i && i % 6 == 0)) {
+            if ( (i && i % 6 === 0)) {
               output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
             }
             output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
-            if ( (i == 23)) {
+            if ( (i === 23)) {
               output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
             }
             return output;
