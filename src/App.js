@@ -22,7 +22,9 @@ class App extends Component {
     list            : '',
     class_name      : '',
     date_time       : '',
-    with_gutter     : true,
+    auto_gutter     : true,
+    with_gutter     : false,
+    populate_gutter : true,
   }
 
   saveClass() {
@@ -45,7 +47,14 @@ class App extends Component {
   }
 
   load(class_name) {
-    this.setState( JSON.parse(localStorage.getItem(class_name) ) )
+    const newState = JSON.parse(localStorage.getItem(class_name) );
+    if (this.state.auto_gutter) {
+      const students = newState.list.split(/\r?\n/);
+      newState.with_gutter = students.length > 24;
+      newState.populate_gutter = newState.with_gutter;
+    }
+
+    this.setState( newState )
   }
 
   deleteClass(class_name) {
@@ -57,6 +66,18 @@ class App extends Component {
 
   layout(randomize) {
     let students = this.state.list.split(/\r?\n/).map(line => line.split(/\s*;\s*/));
+
+    const newState = {
+      with_gutter : this.state.with_gutter,
+      populate_gutter : this.state.populate_gutter
+    };
+
+    if (this.state.auto_gutter) {
+      newState.with_gutter = students.length > 24;
+      newState.populate_gutter = newState.with_gutter;
+    }
+
+    const maxCol = newState.with_gutter && newState.populate_gutter ? 7 : 6;
 
     if (this.state.boy_girl && randomize) {
       students = students.filter(s => s[0]);
@@ -92,7 +113,7 @@ class App extends Component {
           }
         }
 
-        if (col === 6) {
+        if (col === maxCol) {
           col = 0;
           row++;
         }
@@ -104,7 +125,7 @@ class App extends Component {
       students = _.shuffle(students);
     }
 
-    const list = students
+    newState.list = students
       //.filter(s => s.length > 1 && s[0].length)
       .map(s => s.join(';')) //${s[0] || ''};${s[1] || ''}`)
       .join("\n")
@@ -112,7 +133,7 @@ class App extends Component {
     ;
 
 
-    this.setState({ list });
+    this.setState(newState);
   }
 
   toggle(label) {
@@ -153,10 +174,18 @@ class App extends Component {
 
 
     let students = this.state.list.split(/\r?\n/).map(line => line.split(/\s*;\s*/));
-    while (students.length < 24) {
+
+
+    const numSeats = this.state.with_gutter && this.state.populate_gutter ? 28 : 24;
+
+    while (students.length < numSeats) {
       students.push([]);
     }
-    students = students.slice(0,24).reverse();
+
+    const tooManyKids = (students.length > 28 || (students.length > 24 && ! this.state.with_gutter));
+
+    const overflowStudents = students.slice(numSeats, students.length);
+    students = students.slice(0,numSeats).reverse();
 
     return (
       <div className='App'>
@@ -197,6 +226,16 @@ class App extends Component {
                 </div>
                 <div>
                   <button className='btn btn-primary' onClick={() => this.saveClass()}>Save</button>
+                  { tooManyKids &&
+                    <div className="alert alert-danger">WARNING: TOO MANY STUDENTS FOR LAYOUT</div> }
+                  { overflowStudents.length > 0 &&
+                    <div className="alert alert-warning">
+                      <div>Students not in layout:</div>
+                      <ul>
+                        {overflowStudents.map( student => <li>{student[0]}</li> )}
+                      </ul>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -232,10 +271,26 @@ class App extends Component {
                     </div>
                   </div>
                   <div className='form-group'>
+                    <label htmlFor='class_name' className='col-xs-2 control-label'>Auto include gray row?</label>
+                    <div className='col-xs-10'>
+                      <Tipsy content='If checked, will automatically adjust the gray row based upon the number of students' placement='bottom' trigger='hover focus touch'>
+                        <input type = 'checkbox' id='auto_gutter' checked={this.state.auto_gutter} onChange={() => this.toggle('auto_gutter')} />
+                      </Tipsy>
+                    </div>
+                  </div>
+                  <div className='form-group'>
                     <label htmlFor='class_name' className='col-xs-2 control-label'>Include gray row?</label>
                     <div className='col-xs-10'>
-                      <Tipsy content='If checked, will print the rows in color' placement='bottom' trigger='hover focus touch'>
-                        <input type = 'checkbox' id='swap_students' checked={this.state.with_gutter} onChange={() => this.toggle('with_gutter')} />
+                      <Tipsy content='If checked, will include the gray row' placement='bottom' trigger='hover focus touch'>
+                        <input type = 'checkbox' id='with_gutter' checked={this.state.with_gutter} onChange={() => this.toggle('with_gutter')} />
+                      </Tipsy>
+                    </div>
+                  </div>
+                  <div className='form-group'>
+                    <label htmlFor='class_name' className='col-xs-2 control-label'>Populate gray row?</label>
+                    <div className='col-xs-10'>
+                      <Tipsy content='If checked, populate students into the gray row' placement='bottom' trigger='hover focus touch'>
+                        <input type = 'checkbox' id='populate_gutter' checked={this.state.populate_gutter} onChange={() => this.toggle('populate_gutter')} />
                       </Tipsy>
                     </div>
                   </div>
@@ -263,12 +318,17 @@ class App extends Component {
         <div className = {`studentGrid ${this.state.with_gutter ? 'with-gutter' : 'without-gutter'}`}>
           { students.map( (student, i) => {
             let output = [];
-            if (this.state.with_gutter &&  (i && i % 6 === 0)) {
-              output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+            if (this.state.populate_gutter && this.state.with_gutter) {
+              output.push( <Student student={student ? student : []} key={i} idx={ 27 - i } populateGutter={true} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
             }
-            output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
-            if (this.state.with_gutter &&  (i === 23)) {
-              output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+            else {
+              if (this.state.with_gutter &&  (i && i % 6 === 0)) {
+                output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+              }
+              output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
+              if (this.state.with_gutter &&  (i === 23)) {
+                output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+              }
             }
             return output;
           })}

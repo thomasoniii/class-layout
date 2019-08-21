@@ -61,11 +61,14 @@ class Student extends Component {
       four  : 'black yellow yellow yellow'
     }
 
-    if (this.props.color_print) {
+    if (this.props.populateGutter && idx % 7 === 0) {
+      borderColor = 'gray'
+    }
+    else if (this.props.color_print) {
            if (idx < 6)               { borderColor = rows.one   }
       else if (idx >= 6 && idx < 12)  { borderColor = rows.two   }
       else if (idx >= 12 && idx < 18) { borderColor = rows.three }
-      else if (idx >= 18 && idx < 24) { borderColor = rows.four  }
+      else if (idx >= 18 && idx < 27) { borderColor = rows.four  }
     }
     else if (idx !== 99) {
       borderColor = 'black';
