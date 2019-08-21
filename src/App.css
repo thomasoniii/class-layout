@@ -65,25 +65,22 @@ body {
 
 .studentGrid {
   display : grid;
-  grid-template-columns : repeat(6,1fr);
+  grid-template-columns : repeat(7,1fr);
   box-sizing : border-box;
 }
 
-.student-container {
-  box-sizing: border-box;
-}
 
-.student-container:nth-child(6n) .student {
+.student-container:nth-child(7n) .student {
     border : 2px solid gray;
     border-left : 0px;
     border-right-width : 4px;
 }
 
-.student-container:nth-child(6n-5) .student {
+.student-container:nth-child(7n-6) .student {
     border-left-width : 4px;
 }
 
-.student-container:nth-child(6n-1) .student {
+.student-container:nth-child(7n-1) .student {
     border-right-width : 4px;
 }
 
@@ -103,11 +100,11 @@ body {
   border-bottom-width : 0px !important;
 }
 
-.student-container:nth-child(6n) .grade {
+.student-container:nth-child(7n) .grade {
     border : 1px solid gray;
 }
 
-.student-container:nth-last-child(-n+6) .student {
+.student-container:nth-last-child(-n+7) .student {
   border-bottom-width : 4px;
 }
 

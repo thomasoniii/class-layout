@@ -90,7 +90,7 @@ class App extends Component {
             col++;
           }
         }
-        
+
         if (col === 6) {
           col = 0;
           row++;
@@ -181,7 +181,7 @@ class App extends Component {
               </div>
             </div>
             <div className='row'>
-              <div className='col-lg-2'>
+              <div className='col-sm-4'>
                 <b>Saved Classes</b>
                 <ul>
                   { saved_classes.map( (k,v) => {
@@ -189,7 +189,7 @@ class App extends Component {
                   })}
                 </ul>
               </div>
-              <div className='col-lg-2' style={{textAlign : 'right', padding : '0px'}}>
+              <div className='col-sm-4' style={{textAlign : 'right', padding : '0px'}}>
                 <div>
                   <textarea cols='30' rows = '10' value={this.state.list} onChange={(e) => this.setState({list : e.target.value}, this.layout)}>
                   </textarea>
@@ -198,6 +198,8 @@ class App extends Component {
                   <button className='btn btn-primary' onClick={() => this.saveClass()}>Save</button>
                 </div>
               </div>
+            </div>
+            <div className='row'>
               <div className='col-lg-8'>
                 <form className='form-horizontal'>
                   <div className='form-group'>
@@ -252,13 +254,13 @@ class App extends Component {
         <div className = 'studentGrid'>
           { students.map( (student, i) => {
             let output = [];
-            /*if ( (i && i % 6 === 0)) {
+            if ( (i && i % 6 === 0)) {
               output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
-            }*/
+            }
             output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
-            /*if ( (i === 23)) {
+            if ( (i === 23)) {
               output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
-            }*/
+            }
             return output;
           })}
         </div>
