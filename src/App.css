@@ -63,32 +63,31 @@ body {
   padding-right : 5px;
 }
 
-.with-gutter.studentGrid {
+.studentGrid {
   display : grid;
-  grid-template-columns : repeat(7,1fr);
   box-sizing : border-box;
 }
 
 
-.with-gutter .student-container:nth-child(7n) .student {
+.gutter .student {
     border : 2px solid gray;
     border-left : 0px;
     border-right-width : 4px;
 }
 
-.with-gutter .student-container:nth-child(7n-6) .student {
-    border-left-width : 4px;
+.gutter .grade {
+  border : 1px solid gray;
 }
 
-.with-gutter .student-container:nth-child(7n-1) .student {
-    border-right-width : 4px;
+.firstStudent .student {
+  border-left-width : 4px;
 }
 
-.with-gutter .student-container:nth-child(7n) .grade {
-    border : 1px solid gray;
+.lastStudent .student {
+  border-right-width : 4px;
 }
 
-.with-gutter .student-container:nth-last-child(-n+7) .student {
+.lastRow .student {
   border-bottom-width : 4px;
 }
 
@@ -107,36 +106,6 @@ body {
 .grade:nth-last-child(-n+2) {
   border-bottom-width : 0px !important;
 }
-
-
-.without-gutter.studentGrid {
-  display : grid;
-  grid-template-columns : repeat(6,1fr);
-  box-sizing : border-box;
-}
-
-.without-gutter .student-container:nth-child(6n) .student {
-    border : 2px solid gray;
-    border-left : 0px;
-    border-right-width : 4px;
-}
-
-.without-gutter .student-container:nth-child(6n-5) .student {
-    border-left-width : 4px;
-}
-
-.without-gutter .student-container:nth-child(6n-1) .student {
-    border-right-width : 4px;
-}
-
-.without-gutter .student-container:nth-child(6n) .grade {
-    border : 1px solid gray;
-}
-
-.without-gutter .student-container:nth-last-child(-n+6) .student {
-  border-bottom-width : 4px;
-}
-
 
 .assignmentsGrid {
   display : grid;

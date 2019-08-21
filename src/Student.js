@@ -45,12 +45,17 @@ function targetCollect(connect, monitor) {
 
 class Student extends Component {
 
+  static defaultProps = {
+    classes : []
+  }
+
   render() {
 
     const { connectDragSource, connectDropTarget, isDragging, isOver, canDrop } = this.props;
 
     const student = this.props.student;
     const idx     = this.props.idx;
+    const seatsPerRow = this.props.seatsPerRow;
 
     let borderColor = '';
 
@@ -61,21 +66,30 @@ class Student extends Component {
       four  : 'black yellow yellow yellow'
     }
 
+    const classes = ['student-container', ...this.props.classes];
+
     if (this.props.populateGutter && idx % 7 === 0) {
       borderColor = 'gray'
     }
     else if (this.props.color_print) {
-           if (idx < 6)               { borderColor = rows.one   }
-      else if (idx >= 6 && idx < 12)  { borderColor = rows.two   }
-      else if (idx >= 12 && idx < 18) { borderColor = rows.three }
-      else if (idx >= 18 && idx < 27) { borderColor = rows.four  }
+           if (idx < seatsPerRow)                               { borderColor = rows.one; classes.push('lastRow')   }
+      else if (idx >= 1 * seatsPerRow && idx < 2 * seatsPerRow) { borderColor = rows.two   }
+      else if (idx >= 2 * seatsPerRow && idx < 3 * seatsPerRow) { borderColor = rows.three }
+      else if (idx >= 3 * seatsPerRow)                          { borderColor = rows.four  }
     }
     else if (idx !== 99) {
       borderColor = 'black';
     }
 
+    if (idx % seatsPerRow === seatsPerRow - 1) {
+      classes.push("firstStudent")
+    }
+    else if (idx % seatsPerRow === 0) {
+      classes.push("lastStudent")
+    }
+
     return connectDropTarget(connectDragSource(
-      <div className='student-container' style={{ opacity : isDragging ? 0.5 : 1.0, cursor : idx === 99 || student[0] === undefined ? '' : 'move', backgroundColor : isOver && canDrop ? 'lightgreen' : ''}}>
+      <div className={classes.join(' ')} style={{ opacity : isDragging ? 0.5 : 1.0, cursor : idx === 99 || student[0] === undefined ? '' : 'move', backgroundColor : isOver && canDrop ? 'lightgreen' : ''}}>
         <div className='student' style={{ borderColor }}>
           <div className='name'>{student[0]}</div>
           { [0,1,2,3,4,5,6,7,8,9].map( (g) => <div className={`grade`} key={g}></div>) }

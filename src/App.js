@@ -22,9 +22,10 @@ class App extends Component {
     list            : '',
     class_name      : '',
     date_time       : '',
-    auto_gutter     : true,
     with_gutter     : false,
-    populate_gutter : true,
+    auto_seats      : true,
+    seats_per_row   : 6,
+    min_seats_per_row : 6,
   }
 
   saveClass() {
@@ -48,10 +49,10 @@ class App extends Component {
 
   load(class_name) {
     const newState = JSON.parse(localStorage.getItem(class_name) );
-    if (this.state.auto_gutter) {
-      const students = newState.list.split(/\r?\n/);
-      newState.with_gutter = students.length > 24;
-      newState.populate_gutter = newState.with_gutter;
+
+    if (this.state.auto_seats) {
+      const students = newState.list.split(/\r?\n/)
+      newState.seats_per_row = Math.max(Math.ceil(students.length / 4), this.state.min_seats_per_row)
     }
 
     this.setState( newState )
@@ -68,16 +69,10 @@ class App extends Component {
     let students = this.state.list.split(/\r?\n/).map(line => line.split(/\s*;\s*/));
 
     const newState = {
-      with_gutter : this.state.with_gutter,
-      populate_gutter : this.state.populate_gutter
+      //with_gutter : this.state.with_gutter,
     };
 
-    if (this.state.auto_gutter) {
-      newState.with_gutter = students.length > 24;
-      newState.populate_gutter = newState.with_gutter;
-    }
-
-    const maxCol = newState.with_gutter && newState.populate_gutter ? 7 : 6;
+    const maxCol = this.state.seats_per_row;
 
     if (this.state.boy_girl && randomize) {
       students = students.filter(s => s[0]);
@@ -132,17 +127,21 @@ class App extends Component {
       .replace(/\n\n+$/, '')
     ;
 
+    if (this.state.auto_seats) {
+      newState.seats_per_row = Math.max(Math.ceil(students.length / 4), this.state.min_seats_per_row)
+    }
+
 
     this.setState(newState);
   }
 
   toggle(label) {
     let current = this.state[label];
-    this.setState({[label] : !current});
+    this.setState({[label] : !current}, this.layout);
   }
 
   save(label, value) {
-    this.setState({[label] : value});
+    this.setState({[label] : value}, this.layout);
   }
 
   moveStudent(movingStudent, targetStudent, to, from) {
@@ -176,16 +175,21 @@ class App extends Component {
     let students = this.state.list.split(/\r?\n/).map(line => line.split(/\s*;\s*/));
 
 
-    const numSeats = this.state.with_gutter && this.state.populate_gutter ? 28 : 24;
+    const numSeats = this.state.seats_per_row * 4
+    const seatsPerRow = this.state.seats_per_row;
 
     while (students.length < numSeats) {
       students.push([]);
     }
 
-    const tooManyKids = (students.length > 28 || (students.length > 24 && ! this.state.with_gutter));
+    const tooManyKids = students.length > numSeats
 
     const overflowStudents = students.slice(numSeats, students.length);
     students = students.slice(0,numSeats).reverse();
+
+    const studentGridStyles = {
+      gridTemplateColumns : `repeat(${((this.state.with_gutter ? 4 : 0) + numSeats) / 4},1fr)`
+    }
 
     return (
       <div className='App'>
@@ -271,10 +275,16 @@ class App extends Component {
                     </div>
                   </div>
                   <div className='form-group'>
-                    <label htmlFor='class_name' className='col-xs-2 control-label'>Auto include gray row?</label>
+                    <label htmlFor='class_name' className='col-xs-2 control-label'>Seats per row</label>
                     <div className='col-xs-10'>
-                      <Tipsy content='If checked, will automatically adjust the gray row based upon the number of students' placement='bottom' trigger='hover focus touch'>
-                        <input type = 'checkbox' id='auto_gutter' checked={this.state.auto_gutter} onChange={() => this.toggle('auto_gutter')} />
+                      <input type='number' className='form-control' id='class_name' placeholder='Seats Per Row' value={this.state.seats_per_row} onChange={(e) => this.save('seats_per_row', e.target.value)} />
+                    </div>
+                  </div>
+                  <div className='form-group'>
+                    <label htmlFor='class_name' className='col-xs-2 control-label'>Auto adjust seats?</label>
+                    <div className='col-xs-10'>
+                      <Tipsy content='If checked, will adjust the number of seats to fit kids in class' placement='bottom' trigger='hover focus touch'>
+                        <input type = 'checkbox' id='auto_seats' checked={this.state.auto_seats} onChange={() => this.toggle('auto_seats')} />
                       </Tipsy>
                     </div>
                   </div>
@@ -283,14 +293,6 @@ class App extends Component {
                     <div className='col-xs-10'>
                       <Tipsy content='If checked, will include the gray row' placement='bottom' trigger='hover focus touch'>
                         <input type = 'checkbox' id='with_gutter' checked={this.state.with_gutter} onChange={() => this.toggle('with_gutter')} />
-                      </Tipsy>
-                    </div>
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='class_name' className='col-xs-2 control-label'>Populate gray row?</label>
-                    <div className='col-xs-10'>
-                      <Tipsy content='If checked, populate students into the gray row' placement='bottom' trigger='hover focus touch'>
-                        <input type = 'checkbox' id='populate_gutter' checked={this.state.populate_gutter} onChange={() => this.toggle('populate_gutter')} />
                       </Tipsy>
                     </div>
                   </div>
@@ -315,20 +317,37 @@ class App extends Component {
           <div>Time/Days: <span style={{fontSize : '65%', whiteSpace : 'pre'}}>{ this.state.date_time }</span></div>
         </div>
 
-        <div className = {`studentGrid ${this.state.with_gutter ? 'with-gutter' : 'without-gutter'}`}>
+        <div className = 'studentGrid' style={ studentGridStyles }>
           { students.map( (student, i) => {
             let output = [];
-            if (this.state.populate_gutter && this.state.with_gutter) {
-              output.push( <Student student={student ? student : []} key={i} idx={ 27 - i } populateGutter={true} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
+            if (this.state.with_gutter &&  (i && i % seatsPerRow === 0)) {
+              output.push( <Student
+                student={[]}
+                key={`${i}n`}
+                idx={99}
+                onMove={ this.moveStudent.bind(this) }
+                classes={['gutter']}
+              />);
             }
-            else {
-              if (this.state.with_gutter &&  (i && i % 6 === 0)) {
-                output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
-              }
-              output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
-              if (this.state.with_gutter &&  (i === 23)) {
-                output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
-              }
+            output.push(
+              <Student
+                student={student ? student : []}
+                key={i}
+                idx={numSeats-1-i}
+                onMove={ this.moveStudent.bind(this) }
+                color_print={ this.state.color_print }
+                seatsPerRow={seatsPerRow}
+              />
+            );
+            if (this.state.with_gutter &&  (i === numSeats-1)) {
+              //output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
+              output.push( <Student
+                student={[]}
+                key={`${i}n`}
+                idx={99}
+                onMove={ this.moveStudent.bind(this) }
+                classes={['gutter']}
+              />)
             }
             return output;
           })}
