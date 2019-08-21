@@ -67,13 +67,35 @@ class App extends Component {
         girls = _.shuffle(girls);
       }
       students = [];
+      let row = 0;
+      let col = 0;
       while (girls.length || boys.length) {
-        if (girls.length) {
-          students.push(girls.shift());
+        if (row % 2 === 0) {
+          if (girls.length) {
+            students.push(girls.shift());
+            col++;
+          }
+          if (boys.length) {
+            students.push(boys.shift());
+            col++;
+          }
         }
-        if (boys.length) {
-          students.push(boys.shift());
+        else {
+          if (boys.length) {
+            students.push(boys.shift());
+            col++;
+          }
+          if (girls.length) {
+            students.push(girls.shift());
+            col++;
+          }
         }
+        
+        if (col === 6) {
+          col = 0;
+          row++;
+        }
+
       }
     }
     else if (randomize) {
@@ -230,13 +252,13 @@ class App extends Component {
         <div className = 'studentGrid'>
           { students.map( (student, i) => {
             let output = [];
-            if ( (i && i % 6 === 0)) {
+            /*if ( (i && i % 6 === 0)) {
               output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
-            }
+            }*/
             output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
-            if ( (i === 23)) {
+            /*if ( (i === 23)) {
               output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
-            }
+            }*/
             return output;
           })}
         </div>
