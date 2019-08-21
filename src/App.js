@@ -22,6 +22,7 @@ class App extends Component {
     list            : '',
     class_name      : '',
     date_time       : '',
+    with_gutter     : true,
   }
 
   saveClass() {
@@ -230,6 +231,14 @@ class App extends Component {
                       </Tipsy>
                     </div>
                   </div>
+                  <div className='form-group'>
+                    <label htmlFor='class_name' className='col-xs-2 control-label'>Include gray row?</label>
+                    <div className='col-xs-10'>
+                      <Tipsy content='If checked, will print the rows in color' placement='bottom' trigger='hover focus touch'>
+                        <input type = 'checkbox' id='swap_students' checked={this.state.with_gutter} onChange={() => this.toggle('with_gutter')} />
+                      </Tipsy>
+                    </div>
+                  </div>
                   <div className='form-group' style={{display : 'flex', alignItems : 'center'}}>
                     <label htmlFor='class_name' className='col-xs-offset-8 col-xs-2 control-label'>
                       Girl / Boy <input type = 'checkbox' id='boy_girl' checked={this.state.boy_girl} onChange={() => this.toggle('boy_girl')} /></label>
@@ -251,14 +260,14 @@ class App extends Component {
           <div>Time/Days: <span style={{fontSize : '65%', whiteSpace : 'pre'}}>{ this.state.date_time }</span></div>
         </div>
 
-        <div className = 'studentGrid'>
+        <div className = {`studentGrid ${this.state.with_gutter ? 'with-gutter' : 'without-gutter'}`}>
           { students.map( (student, i) => {
             let output = [];
-            if ( (i && i % 6 === 0)) {
+            if (this.state.with_gutter &&  (i && i % 6 === 0)) {
               output.push( <Student student={[]} key={`${i}n`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
             }
             output.push( <Student student={student ? student : []} key={i} idx={23-i} onMove={ this.moveStudent.bind(this) } color_print={ this.state.color_print }/> );
-            if ( (i === 23)) {
+            if (this.state.with_gutter &&  (i === 23)) {
               output.push( <Student student={[]} key={`${i}x`} idx={99} onMove={ this.moveStudent.bind(this) }/> );
             }
             return output;
