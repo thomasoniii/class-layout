@@ -21,7 +21,7 @@ const App = () => {
   const [with_gutter, setWithGutter] = useState(false);
   const [auto_seats, setAutoSeats] = useState(true);
   const [seats_per_row, setSeatsPerRow] = useState(7);
-  const [min_seats_per_row, setMinSeatsPerRow] = useState(6);
+  const [min_seats_per_row, setMinSeatsPerRow] = useState(7);
   const [saved_classes, setSavedClasses] = useState([]);
 
   const saveClass = () => {
