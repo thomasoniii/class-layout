@@ -1,31 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 
 import types from "./types";
 
 const Student = ({
   classes = [],
-  isDragging,
+
   text,
   student,
   idx,
   seatsPerRow,
+  onMove,
 
   populateGutter,
   color_print,
 }) => {
-  /*  const [{ opacity }, dragRef] = useDrag(
+  const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: types.STUDENT,
-      item: { student, idx, seatsPerRow, populateGutter, color_print },
-      collect: (monitor) => ({ opacity: monitor.isDragging() ? 0.5 : 1 }),
+      item: { student, idx, seatsPerRow, populateGutter, color_print, onMove },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      canDrag: () => Array.isArray(student) && student[0] && idx !== 99,
     }),
     []
   );
 
-  const [collectedProps, drop] = useDrop(() => ({ accept: types.STUDENT }));
-
-  console.log("DROPS WITH : ", collectedProps, drop);*/
+  const [{ canDrop, isOver }, dropRef] = useDrop(
+    () => ({
+      accept: types.STUDENT,
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
+      canDrop: (item, monitor) => item.student[0] !== student[0] && idx !== 99,
+      drop: (item) => {
+        onMove(item.student, student, idx, item.idx);
+      },
+    }),
+    [onMove]
+  );
 
   let borderColor = "";
 
@@ -60,10 +75,10 @@ const Student = ({
   } else if (idx % seatsPerRow === 0) {
     _classes.push("lastStudent");
   }
-  const isOver = false;
-  const canDrop = false;
+
   return (
     <div
+      ref={(node) => dragRef(dropRef(node))}
       className={_classes.join(" ")}
       style={{
         opacity: isDragging ? 0.5 : 1.0,

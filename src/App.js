@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 import _ from "lodash";
-import Tipsy from "react-tipsy";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
-import "react-tipsy/dist/react-tipsy.css";
 
 import Student from "./Student";
 
@@ -133,26 +133,26 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    layout();
-  }, [layout, list]);
+  const moveStudent = useCallback(
+    (movingStudent, targetStudent, to, from) => {
+      let students = list.split(/\r?\n/).map((s) => s.split(/;/));
 
-  const moveStudent = (movingStudent, targetStudent, to, from) => {
-    let students = list.split(/\r?\n/).map((s) => s.split(/;/));
+      while (to > students.length) {
+        students.push([]);
+      }
 
-    while (to > students.length) {
-      students.push([]);
-    }
-    if (swap_students) {
-      students.splice(from, 1, targetStudent);
-      students.splice(to, 1, movingStudent);
-    } else {
-      students.splice(from, 1);
-      students.splice(to, 0, movingStudent);
-    }
+      if (swap_students) {
+        students.splice(from, 1, targetStudent);
+        students.splice(to, 1, movingStudent);
+      } else {
+        students.splice(from, 1);
+        students.splice(to, 0, movingStudent);
+      }
 
-    setList(students.map((s) => s.join(";")).join("\n"));
-  };
+      setList(students.map((s) => s.join(";")).join("\n"));
+    },
+    [list, swap_students, setList]
+  );
 
   const updateSavedClasses = () => {
     const new_saved_classes = [];
@@ -186,357 +186,339 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <div id="config">
-        <div className="App-header">
-          <h2>Class room layout</h2>
-        </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className="App">
+        <div id="config">
+          <div className="App-header">
+            <h2>Class room layout</h2>
+          </div>
 
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-12">
-              <b>Instructions:</b>
-              <ol>
-                <li>
-                  Add a list of students, one student per line. Optionally may
-                  list gender after semi-colon. i.e., 'Jim Thomason' or 'Jim
-                  Thomason;M'
-                </li>
-                <li>
-                  As students are added, they appear on the class layout.
-                  Students at the top show up in the front rows at the bottom.
-                </li>
-                <li>Fill in the class name and Time/Days on the right.</li>
-                <li>
-                  You can re-arrange students by dragging and dropping them in
-                  the interface. Drag one student onto another to move them. No
-                  need to edit the list directly!
-                </li>
-                <li>
-                  If the "swap students" checkbox is enabled, the students will
-                  swap. If it{"'"}s not enabled, then the student will insert
-                  before the one it is dropped on. The student dropped on will
-                  not move.
-                </li>
-                <li>
-                  The color print checkbox toggles coloring for color printers.
-                </li>
-                <li>
-                  You can randomize the layout, and optionally choose to do a
-                  boy/girl layout. Just click the randomize button.
-                </li>
-                <li>
-                  When you are satisfied, click the "Save" button to save it to
-                  your computer under the class name.
-                </li>
-              </ol>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-4">
-              <b>Saved Classes</b>
-              <ul>
-                {saved_classes.map((k, v) => {
-                  return (
-                    <li key={k} className="saved_class">
-                      <a
-                        onClick={() => {
-                          load(k);
-                          updateSavedClasses();
-                        }}
-                      >
-                        {k}
-                      </a>{" "}
-                      <a
-                        onClick={() => {
-                          deleteClass(k);
-                          updateSavedClasses();
-                        }}
-                        style={{ color: "darkred" }}
-                      >
-                        [X]
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <div
-              className="col-sm-4"
-              style={{ textAlign: "right", padding: "0px" }}
-            >
-              <div>
-                <textarea
-                  cols="30"
-                  rows="10"
-                  value={list}
-                  onChange={(e) => setList(e.target.value)}
-                ></textarea>
-              </div>
-              <div>
-                <button className="btn btn-primary" onClick={() => saveClass()}>
-                  Save
-                </button>
-                {tooManyKids && (
-                  <div className="alert alert-danger">
-                    WARNING: TOO MANY STUDENTS FOR LAYOUT
-                  </div>
-                )}
-                {overflowStudents.length > 0 && (
-                  <div className="alert alert-warning">
-                    <div>Students not in layout:</div>
-                    <ul>
-                      {overflowStudents.map((student) => (
-                        <li>{student[0]}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-12">
+                <b>Instructions:</b>
+                <ol>
+                  <li>
+                    Add a list of students, one student per line. Optionally may
+                    list gender after semi-colon. i.e., 'Jim Thomason' or 'Jim
+                    Thomason;M'
+                  </li>
+                  <li>
+                    As students are added, they appear on the class layout.
+                    Students at the top show up in the front rows at the bottom.
+                  </li>
+                  <li>Fill in the class name and Time/Days on the right.</li>
+                  <li>
+                    You can re-arrange students by dragging and dropping them in
+                    the interface. Drag one student onto another to move them.
+                    No need to edit the list directly!
+                  </li>
+                  <li>
+                    If the "swap students" checkbox is enabled, the students
+                    will swap. If it{"'"}s not enabled, then the student will
+                    insert before the one it is dropped on. The student dropped
+                    on will not move.
+                  </li>
+                  <li>
+                    The color print checkbox toggles coloring for color
+                    printers.
+                  </li>
+                  <li>
+                    You can randomize the layout, and optionally choose to do a
+                    boy/girl layout. Just click the randomize button.
+                  </li>
+                  <li>
+                    When you are satisfied, click the "Save" button to save it
+                    to your computer under the class name.
+                  </li>
+                </ol>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-8">
-              <form className="form-horizontal">
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
-                  >
-                    Class Name
-                  </label>
-                  <div className="col-xs-10">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="class_name"
-                      placeholder="Class Name"
-                      value={class_name}
-                      onChange={(e) => setClassName(e.target.value)}
-                    />
-                  </div>
+            <div className="row">
+              <div className="col-sm-4">
+                <b>Saved Classes</b>
+                <ul>
+                  {saved_classes.map((k, v) => {
+                    return (
+                      <li key={k} className="saved_class">
+                        <a
+                          onClick={() => {
+                            load(k);
+                            updateSavedClasses();
+                          }}
+                        >
+                          {k}
+                        </a>{" "}
+                        <a
+                          onClick={() => {
+                            deleteClass(k);
+                            updateSavedClasses();
+                          }}
+                          style={{ color: "darkred" }}
+                        >
+                          [X]
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <div
+                className="col-sm-4"
+                style={{ textAlign: "right", padding: "0px" }}
+              >
+                <div>
+                  <textarea
+                    cols="30"
+                    rows="10"
+                    value={list}
+                    onChange={(e) => setList(e.target.value)}
+                  ></textarea>
                 </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
+                <div>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => saveClass()}
                   >
-                    Time/Days
-                  </label>
-                  <div className="col-xs-10">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="date_time"
-                      placeholder="Time/Days"
-                      value={date_time}
-                      onChange={(e) => setDateTime(e.target.value)}
-                    />
-                  </div>
+                    Save
+                  </button>
+                  {tooManyKids && (
+                    <div className="alert alert-danger">
+                      WARNING: TOO MANY STUDENTS FOR LAYOUT
+                    </div>
+                  )}
+                  {overflowStudents.length > 0 && (
+                    <div className="alert alert-warning">
+                      <div>Students not in layout:</div>
+                      <ul>
+                        {overflowStudents.map((student) => (
+                          <li>{student[0]}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
-                  >
-                    Swap students
-                  </label>
-                  <div className="col-xs-10">
-                    <Tipsy
-                      content="If checked, will swap students in place when dragging. If unchecked, will insert the dragged student at that spot"
-                      placement="bottom"
-                      trigger="hover focus touch"
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-8">
+                <form className="form-horizontal">
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
                     >
+                      Class Name
+                    </label>
+                    <div className="col-xs-10">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="class_name"
+                        placeholder="Class Name"
+                        value={class_name}
+                        onChange={(e) => setClassName(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
+                    >
+                      Time/Days
+                    </label>
+                    <div className="col-xs-10">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="date_time"
+                        placeholder="Time/Days"
+                        value={date_time}
+                        onChange={(e) => setDateTime(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
+                    >
+                      Swap students
+                    </label>
+                    <div className="col-xs-10">
                       <input
                         type="checkbox"
                         id="swap_students"
                         checked={swap_students}
                         onChange={() => setSwapStudents(!swap_students)}
                       />
-                    </Tipsy>
+                    </div>
                   </div>
-                </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
-                  >
-                    Color print
-                  </label>
-                  <div className="col-xs-10">
-                    <Tipsy
-                      content="If checked, will print the rows in color"
-                      placement="bottom"
-                      trigger="hover focus touch"
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
                     >
+                      Color print
+                    </label>
+                    <div className="col-xs-10">
                       <input
                         type="checkbox"
                         id="swap_students"
                         checked={color_print}
                         onChange={() => setColorPrint(!color_print)}
                       />
-                    </Tipsy>
+                    </div>
                   </div>
-                </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
-                  >
-                    Seats per row
-                  </label>
-                  <div className="col-xs-10">
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="class_name"
-                      placeholder="Seats Per Row"
-                      value={seats_per_row}
-                      onChange={(e) => {
-                        console.log("SET SeATS : ", e.target.value);
-                        setSeatsPerRow(e.target.value);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
-                  >
-                    Auto adjust seats?
-                  </label>
-                  <div className="col-xs-10">
-                    <Tipsy
-                      content="If checked, will adjust the number of seats to fit kids in class"
-                      placement="bottom"
-                      trigger="hover focus touch"
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
                     >
+                      Seats per row
+                    </label>
+                    <div className="col-xs-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="class_name"
+                        placeholder="Seats Per Row"
+                        value={seats_per_row}
+                        onChange={(e) => {
+                          setSeatsPerRow(e.target.value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
+                    >
+                      Auto adjust seats?
+                    </label>
+                    <div className="col-xs-10">
                       <input
                         type="checkbox"
                         id="auto_seats"
                         checked={auto_seats}
                         onChange={() => setAutoSeats(!auto_seats)}
                       />
-                    </Tipsy>
+                    </div>
                   </div>
-                </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-2 control-label"
-                  >
-                    Include gray row?
-                  </label>
-                  <div className="col-xs-10">
-                    <Tipsy
-                      content="If checked, will include the gray row"
-                      placement="bottom"
-                      trigger="hover focus touch"
+                  <div className="form-group">
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-2 control-label"
                     >
+                      Include gray row?
+                    </label>
+                    <div className="col-xs-10">
                       <input
                         type="checkbox"
                         id="with_gutter"
                         checked={with_gutter}
                         onChange={() => setWithGutter(!with_gutter)}
                       />
-                    </Tipsy>
+                    </div>
                   </div>
-                </div>
-                <div
-                  className="form-group"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <label
-                    htmlFor="class_name"
-                    className="col-xs-offset-8 col-xs-2 control-label"
+                  <div
+                    className="form-group"
+                    style={{ display: "flex", alignItems: "center" }}
                   >
-                    Girl / Boy{" "}
-                    <input
-                      type="checkbox"
-                      id="boy_girl"
-                      checked={boy_girl}
-                      onChange={() => setBoyGirl(!boy_girl)}
-                    />
-                  </label>
-                  <div className="col-xs-1">
-                    <button
-                      type="button"
-                      className="btn btn-info"
-                      onClick={() => {
-                        if (window.confirm("Really randomize layout?")) {
-                          layout(true);
-                        }
-                      }}
+                    <label
+                      htmlFor="class_name"
+                      className="col-xs-offset-8 col-xs-2 control-label"
                     >
-                      Randomize
-                    </button>
+                      Girl / Boy{" "}
+                      <input
+                        type="checkbox"
+                        id="boy_girl"
+                        checked={boy_girl}
+                        onChange={() => setBoyGirl(!boy_girl)}
+                      />
+                    </label>
+                    <div className="col-xs-1">
+                      <button
+                        type="button"
+                        className="btn btn-info"
+                        onClick={() => {
+                          if (window.confirm("Really randomize layout?")) {
+                            layout(true);
+                          }
+                        }}
+                      >
+                        Randomize
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-              <div>&nbsp;</div>
+                </form>
+                <div>&nbsp;</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="headerGrid">
-        <div>
-          Class: <span style={{ fontSize: "70%" }}>{class_name}</span>
+        <div className="headerGrid">
+          <div>
+            Class: <span style={{ fontSize: "70%" }}>{class_name}</span>
+          </div>
+          <div>
+            Time/Days:{" "}
+            <span style={{ fontSize: "65%", whiteSpace: "pre" }}>
+              {date_time}
+            </span>
+          </div>
         </div>
-        <div>
-          Time/Days:{" "}
-          <span style={{ fontSize: "65%", whiteSpace: "pre" }}>
-            {date_time}
-          </span>
-        </div>
-      </div>
 
-      <div className="studentGrid" style={studentGridStyles}>
-        {students.map((student, i) => {
-          let output = [];
-          if (with_gutter && i && i % seatsPerRow === 0) {
+        <div className="studentGrid" style={studentGridStyles}>
+          {students.map((student, i) => {
+            let output = [];
+            if (with_gutter && i && i % seatsPerRow === 0) {
+              output.push(
+                <Student
+                  student={[]}
+                  key={`${i}n`}
+                  idx={99}
+                  onMove={moveStudent}
+                  classes={["gutter"]}
+                />
+              );
+            }
             output.push(
               <Student
-                student={[]}
-                key={`${i}n`}
-                idx={99}
+                student={student ? student : []}
+                key={student}
+                idx={numSeats - 1 - i}
                 onMove={moveStudent}
-                classes={["gutter"]}
+                color_print={color_print}
+                seatsPerRow={seatsPerRow}
               />
             );
-          }
-          output.push(
-            <Student
-              student={student ? student : []}
-              key={i}
-              idx={numSeats - 1 - i}
-              onMove={moveStudent}
-              color_print={color_print}
-              seatsPerRow={seatsPerRow}
-            />
-          );
-          if (with_gutter && i === numSeats - 1) {
-            output.push(
-              <Student
-                student={[]}
-                key={`${i}n`}
-                idx={99}
-                onMove={moveStudent}
-                classes={["gutter"]}
-              />
-            );
-          }
-          return output;
-        })}
-      </div>
+            if (with_gutter && i === numSeats - 1) {
+              output.push(
+                <Student
+                  student={[]}
+                  key={`${i}n`}
+                  idx={99}
+                  onMove={moveStudent}
+                  classes={["gutter"]}
+                />
+              );
+            }
 
-      <div className="assignmentsGrid">
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-          <div key={i}></div>
-        ))}
+            return output;
+          })}
+        </div>
+
+        <div className="assignmentsGrid">
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+            <div key={i}></div>
+          ))}
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 };
 

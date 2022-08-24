@@ -33,6 +33,7 @@ body {
   border: 2px solid;
   display: grid;
   grid-template-columns: 70% 15% 15%;
+  user-select: none;
 }
 
 .name {
