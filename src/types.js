@@ -1,3 +1,3 @@
 export default {
-  STUDENT : 'STUDENT',
-}
+  STUDENT: "STUDENT",
+};
