@@ -7,11 +7,11 @@
   height: 60px;
   padding: 15px;
   color: white;
-  text-align : center;
+  text-align: center;
 }
 
 h2 {
-  margin : 0px !important;
+  margin: 0px !important;
 }
 
 .App-intro {
@@ -19,102 +19,105 @@ h2 {
 }
 
 body {
-  padding : 0px;
-  margin : 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 @media print {
   #config {
-    display : none;
+    display: none;
   }
-
 }
 
 .student {
-  border : 2px solid;
-  display : grid;
-  grid-template-columns : 70% 15% 15%;
+  border: 2px solid;
+  display: grid;
+  grid-template-columns: 70% 15% 15%;
+  user-select: none;
 }
 
 .name {
-  height : 130px;
-  border : 0px solid black;
+  height: 130px;
+  border: 0px solid black;
   grid-row-start: 1;
   grid-row-end: 6;
-  padding : 5px;
+  padding: 5px;
   text-align: center;
 }
 
 .grade {
   //height : 20px;
   //width : 20px;
-  border : 1px solid black;
+  border: 1px solid black;
 }
 
 .headerGrid {
-  display : grid;
-  grid-template-columns : 1fr 1fr;
-  border : 1px solid black;
-  font-size : 250%;
-  text-align : left;
-  font-weight : bold;
-  box-sizing : border-box;
-  padding-left : 5px;
-  padding-right : 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid black;
+  font-size: 250%;
+  text-align: left;
+  font-weight: bold;
+  box-sizing: border-box;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .studentGrid {
-  display : grid;
-  box-sizing : border-box;
+  display: grid;
+  box-sizing: border-box;
 }
 
-
 .gutter .student {
-    border : 2px solid gray;
-    border-left : 0px;
-    border-right-width : 4px;
+  border: 2px solid gray;
+  border-left: 0px;
+  border-right-width: 4px;
 }
 
 .gutter .grade {
-  border : 1px solid gray;
+  border: 1px solid gray;
 }
 
 .firstStudent .student {
-  border-left-width : 4px;
+  border-left-width: 4px;
 }
 
 .lastStudent .student {
-  border-right-width : 4px;
+  border-right-width: 4px;
 }
 
 .lastRow .student {
-  border-bottom-width : 4px;
+  border-bottom-width: 4px;
 }
 
-.grade:nth-child(-n+3) {
-  border-top-width : 0px !important;
+.grade:nth-child(-n + 3) {
+  border-top-width: 0px !important;
 }
 
 .grade:nth-child(2n) {
-  border-left-width : 2px !important;
+  border-left-width: 2px !important;
 }
 
 .grade:nth-child(2n + 1) {
-  border-right-width : 0px !important;
+  border-right-width: 0px !important;
 }
 
-.grade:nth-last-child(-n+2) {
-  border-bottom-width : 0px !important;
+.grade:nth-last-child(-n + 2) {
+  border-bottom-width: 0px !important;
 }
 
 .assignmentsGrid {
-  display : grid;
-  grid-template-columns : 1fr 1fr;
-  grid-gap : 10%;
-  box-sizing : border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10%;
+  box-sizing: border-box;
 }
 
 .assignmentsGrid div {
-  border-bottom : 1px solid black;
-  height : 30px;
+  border-bottom: 1px solid black;
+  height: 30px;
+}
+
+.saved_class {
+  cursor: pointer;
 }

@@ -9,18 +9,18 @@
     "react-scripts": "^1.1.4"
   },
   "dependencies": {
-    "ajv": "^6.5.3",
-    "bootstrap": "^3.3.7",
+    "ajv": "^8.11.0",
+    "bootstrap": "^5.2.0",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.10",
-    "react": "^15.6.1",
-    "react-dnd": "^2.4.0",
-    "react-dnd-html5-backend": "^2.4.1",
-    "react-dom": "^15.6.1",
-    "react-redux": "^5.0.6",
-    "react-tipsy": "^0.6.0",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.2",
+    "react-tipsy": "^0.6.2",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
