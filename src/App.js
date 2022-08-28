@@ -2,14 +2,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
-import _ from "lodash";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Switch from "@mui/material/Switch";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "font-awesome/css/font-awesome.min.css";
+import shuffle from "lodash.shuffle";
 
 import Student from "./Student";
 
 import "./App.css";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 const App = () => {
   const [boy_girl, setBoyGirl] = useState(true);
@@ -81,8 +88,8 @@ const App = () => {
       );
 
       if (randomize) {
-        boys = _.shuffle(boys);
-        girls = _.shuffle(girls);
+        boys = shuffle(boys);
+        girls = shuffle(girls);
       }
       students = [];
       let row = 0;
@@ -115,7 +122,7 @@ const App = () => {
       }
     } else if (randomize) {
       students = students.filter((s) => s[0]);
-      students = _.shuffle(students);
+      students = shuffle(students);
     }
 
     setList(
@@ -193,9 +200,9 @@ const App = () => {
             <h2>Class room layout</h2>
           </div>
 
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-12">
+          <div>
+            <div>
+              <div>
                 <b>Instructions:</b>
                 <ol>
                   <li>
@@ -234,8 +241,8 @@ const App = () => {
                 </ol>
               </div>
             </div>
-            <div className="row">
-              <div className="col-sm-4">
+            <div>
+              <div>
                 <b>Saved Classes</b>
                 <ul>
                   {saved_classes.map((k, v) => {
@@ -263,25 +270,21 @@ const App = () => {
                   })}
                 </ul>
               </div>
-              <div
-                className="col-sm-4"
-                style={{ textAlign: "right", padding: "0px" }}
-              >
+              <div style={{ textAlign: "right", padding: "0px" }}>
                 <div>
-                  <textarea
-                    cols="30"
-                    rows="10"
+                  <TextField
+                    label="Student list"
+                    multiline
+                    cols={30}
+                    rows={10}
                     value={list}
                     onChange={(e) => setList(e.target.value)}
-                  ></textarea>
+                  />
                 </div>
                 <div>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => saveClass()}
-                  >
+                  <Button variant="contained" onClick={() => saveClass()}>
                     Save
-                  </button>
+                  </Button>
                   {tooManyKids && (
                     <div className="alert alert-danger">
                       WARNING: TOO MANY STUDENTS FOR LAYOUT
@@ -300,149 +303,102 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-lg-8">
-                <form className="form-horizontal">
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Class Name
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="class_name"
-                        placeholder="Class Name"
-                        value={class_name}
-                        onChange={(e) => setClassName(e.target.value)}
-                      />
-                    </div>
+            <div>
+              <div>
+                <form>
+                  <div>
+                    <TextField
+                      label="Class Name"
+                      variant="outlined"
+                      value={class_name}
+                      onChange={(e) => setClassName(e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Time/Days
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="date_time"
-                        placeholder="Time/Days"
-                        value={date_time}
-                        onChange={(e) => setDateTime(e.target.value)}
-                      />
-                    </div>
+                  <div>
+                    <TextField
+                      label="Time/Days"
+                      variant="outlined"
+                      value={date_time}
+                      onChange={(e) => setDateTime(e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Swap students
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="checkbox"
-                        id="swap_students"
-                        checked={swap_students}
-                        onChange={() => setSwapStudents(!swap_students)}
+                  <div>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={swap_students}
+                            onChange={() => setSwapStudents(!swap_students)}
+                          />
+                        }
+                        label="swap students"
                       />
-                    </div>
+                    </FormGroup>
                   </div>
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Color print
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="checkbox"
-                        id="swap_students"
-                        checked={color_print}
-                        onChange={() => setColorPrint(!color_print)}
+                  <div>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={color_print}
+                            onChange={() => setColorPrint(!color_print)}
+                          />
+                        }
+                        label="color print"
                       />
-                    </div>
+                    </FormGroup>
                   </div>
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Seats per row
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="class_name"
-                        placeholder="Seats Per Row"
-                        value={seats_per_row}
-                        onChange={(e) => {
-                          setSeatsPerRow(e.target.value);
-                        }}
-                      />
-                    </div>
+                  <div>
+                    <TextField
+                      label="seats per row"
+                      inputProps={{ min: 1 }}
+                      variant="outlined"
+                      value={seats_per_row}
+                      type="number"
+                      onChange={(e) => setSeatsPerRow(e.target.value)}
+                    />
                   </div>
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Auto adjust seats?
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="checkbox"
-                        id="auto_seats"
-                        checked={auto_seats}
-                        onChange={() => setAutoSeats(!auto_seats)}
+                  <div>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={auto_seats}
+                            onChange={() => setAutoSeats(!auto_seats)}
+                          />
+                        }
+                        label="auto adjust seats"
                       />
-                    </div>
+                    </FormGroup>
                   </div>
-                  <div className="form-group">
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-2 control-label"
-                    >
-                      Include gray row?
-                    </label>
-                    <div className="col-xs-10">
-                      <input
-                        type="checkbox"
-                        id="with_gutter"
-                        checked={with_gutter}
-                        onChange={() => setWithGutter(!with_gutter)}
+                  <div>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={with_gutter}
+                            onChange={() => setWithGutter(!with_gutter)}
+                          />
+                        }
+                        label="include gray row"
                       />
-                    </div>
+                    </FormGroup>
                   </div>
-                  <div
-                    className="form-group"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <label
-                      htmlFor="class_name"
-                      className="col-xs-offset-8 col-xs-2 control-label"
-                    >
-                      Girl / Boy{" "}
-                      <input
-                        type="checkbox"
-                        id="boy_girl"
-                        checked={boy_girl}
-                        onChange={() => setBoyGirl(!boy_girl)}
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={boy_girl}
+                            onChange={() => setBoyGirl(!boy_girl)}
+                          />
+                        }
+                        label="girl/boy"
                       />
-                    </label>
-                    <div className="col-xs-1">
-                      <button
-                        type="button"
-                        className="btn btn-info"
+                    </FormGroup>
+                    <div>
+                      <Button
+                        variant="contained"
                         onClick={() => {
                           if (window.confirm("Really randomize layout?")) {
                             layout(true);
@@ -450,7 +406,7 @@ const App = () => {
                         }}
                       >
                         Randomize
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </form>
