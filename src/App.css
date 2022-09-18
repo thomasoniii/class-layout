@@ -23,9 +23,22 @@ body {
   margin: 0px;
 }
 
+.print-control {
+  display: none;
+}
+
 @media print {
   #config {
     display: none;
+  }
+
+  .ui-control {
+    display: none;
+    background-color: blue;
+  }
+
+  .print-control {
+    display: initial;
   }
 }
 
@@ -61,6 +74,7 @@ body {
   box-sizing: border-box;
   padding-left: 5px;
   padding-right: 5px;
+  align-items: center;
 }
 
 .studentGrid {
@@ -120,4 +134,9 @@ body {
 
 .saved_class {
   cursor: pointer;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
 }
