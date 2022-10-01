@@ -3,10 +3,12 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Popover from "@mui/material/Popover";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -21,6 +23,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -50,6 +53,8 @@ const App = () => {
   const [saved_classes, setSavedClasses] = useState([]);
   const [showInstructions, setShowInstructions] = useState(false);
   const [showClassList, setShowClassList] = useState(false);
+  const [reverseLayout, setReverseLayout] = useState(true);
+  const [settingsAnchor, setSettingsAnchor] = useState(false);
 
   const printing = useMediaQuery("@media print");
 
@@ -211,7 +216,10 @@ const App = () => {
   const tooManyKids = students.length > numSeats;
 
   const overflowStudents = students.slice(numSeats, students.length);
-  students = students.slice(0, numSeats).reverse();
+  students = students.slice(0, numSeats);
+  if (reverseLayout) {
+    students.reverse();
+  }
 
   const studentGridStyles = {
     gridTemplateColumns: `repeat(${
@@ -288,203 +296,237 @@ const App = () => {
         />
       </Drawer>
 
-      <div className="App">
-        <div id="config">
-          <div>
-            <TextField
-              label="Student list"
-              multiline
-              cols={30}
-              rows={10}
-              value={list}
-              onChange={(e) => setList(e.target.value)}
-            />
-          </div>
-          <div>
-            <Button variant="contained" onClick={() => saveClass()}>
-              Save
-            </Button>
-            {tooManyKids && (
-              <div className="alert alert-danger">
-                WARNING: TOO MANY STUDENTS FOR LAYOUT
-              </div>
-            )}
-            {overflowStudents.length > 0 && (
-              <div className="alert alert-warning">
-                <div>Students not in layout:</div>
-                <ul>
-                  {overflowStudents.map((student) => (
-                    <li>{student[0]}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="controls">
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={swap_students}
-                    onChange={() => setSwapStudents(!swap_students)}
-                  />
-                }
-                label="swap students"
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={color_print}
-                    onChange={() => setColorPrint(!color_print)}
-                  />
-                }
-                label="color print"
-              />
-            </FormGroup>
-
-            <TextField
-              label="seats per row"
-              inputProps={{ min: 1 }}
-              variant="outlined"
-              value={seats_per_row}
-              type="number"
-              onChange={(e) => setSeatsPerRow(e.target.value)}
-            />
-
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={auto_seats}
-                    onChange={() => setAutoSeats(!auto_seats)}
-                  />
-                }
-                label="auto adjust seats"
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={with_gutter}
-                    onChange={() => setWithGutter(!with_gutter)}
-                  />
-                }
-                label="include gray row"
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={boy_girl}
-                    onChange={() => setBoyGirl(!boy_girl)}
-                  />
-                }
-                label="girl/boy"
-              />
-            </FormGroup>
-
-            <Button
-              variant="contained"
-              onClick={() => {
-                if (window.confirm("Really randomize layout?")) {
-                  layout(true);
-                }
-              }}
-            >
-              Randomize
-            </Button>
-          </div>
-        </div>
-
-        <div className="headerGrid">
-          <div>
-            Class:
-            <span className="ui-control">
-              <TextField
-                label=""
-                variant="outlined"
-                value={class_name}
-                placeholder="Name this class"
-                onChange={(e) => setClassName(e.target.value)}
-              />
-            </span>
-            <div style={{ fontSize: "70%" }} className="print-control">
-              {class_name}
-            </div>
-          </div>
-          <div>
-            Time/Days:
-            <span className="ui-control">
-              <TextField
-                label=""
-                variant="outlined"
-                placeholder="When does this class meet"
-                value={date_time}
-                onChange={(e) => setDateTime(e.target.value)}
-              />
-            </span>
-            <div
-              style={{ fontSize: "65%", whiteSpace: "pre" }}
-              className="print-control"
-            >
-              {date_time}
-            </div>
-          </div>
-        </div>
-
-        <div className="studentGrid" style={studentGridStyles}>
-          {students.map((student, i) => {
-            let output = [];
-            if (with_gutter && i && i % seatsPerRow === 0) {
-              output.push(
-                <Student
-                  student={[]}
-                  key={`${i}n`}
-                  idx={99}
-                  onMove={moveStudent}
-                  classes={["gutter"]}
+      <Popover
+        open={Boolean(settingsAnchor)}
+        anchorEl={settingsAnchor}
+        onClose={() => setSettingsAnchor(undefined)}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Typography sx={{ p: 2 }}>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={swap_students}
+                  onChange={() => setSwapStudents(!swap_students)}
                 />
-              );
-            }
-            output.push(
-              <Student
-                student={student ? student : []}
-                key={student}
-                idx={numSeats - 1 - i}
-                onMove={moveStudent}
-                color_print={color_print}
-                seatsPerRow={seatsPerRow}
-              />
-            );
-            if (with_gutter && i === numSeats - 1) {
-              output.push(
-                <Student
-                  student={[]}
-                  key={`${i}n`}
-                  idx={99}
-                  onMove={moveStudent}
-                  classes={["gutter"]}
+              }
+              label="swap students"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={color_print}
+                  onChange={() => setColorPrint(!color_print)}
                 />
-              );
-            }
+              }
+              label="color print"
+            />
+          </FormGroup>
+          <TextField
+            label="seats per row"
+            inputProps={{ min: 1 }}
+            variant="outlined"
+            value={seats_per_row}
+            type="number"
+            onChange={(e) => setSeatsPerRow(e.target.value)}
+          />
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={auto_seats}
+                  onChange={() => setAutoSeats(!auto_seats)}
+                />
+              }
+              label="auto adjust seats"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={with_gutter}
+                  onChange={() => setWithGutter(!with_gutter)}
+                />
+              }
+              label="include gray row"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={boy_girl}
+                  onChange={() => setBoyGirl(!boy_girl)}
+                />
+              }
+              label="girl/boy"
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={reverseLayout}
+                  onChange={() => setReverseLayout(!reverseLayout)}
+                />
+              }
+              label="reverse layout"
+            />
+          </FormGroup>
+        </Typography>
+      </Popover>
 
-            return output;
-          })}
-        </div>
+      <Box>
+        <div className="App">
+          <Box sx={{ p: 2 }}>
+            <div className="headerGrid">
+              <div>
+                Class:
+                <span className="ui-control">
+                  <TextField
+                    label=""
+                    variant="outlined"
+                    value={class_name}
+                    placeholder="Name this class"
+                    onChange={(e) => setClassName(e.target.value)}
+                  />
+                </span>
+                <div style={{ fontSize: "70%" }} className="print-control">
+                  {class_name}
+                </div>
+              </div>
+              <div>
+                Time/Days:
+                <span className="ui-control">
+                  <TextField
+                    label=""
+                    variant="outlined"
+                    placeholder="When does this class meet"
+                    value={date_time}
+                    onChange={(e) => setDateTime(e.target.value)}
+                  />
+                </span>
+                <div
+                  style={{ fontSize: "65%", whiteSpace: "pre" }}
+                  className="print-control"
+                >
+                  {date_time}
+                </div>
+              </div>
+            </div>
 
-        <div className="assignmentsGrid">
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-            <div key={i}></div>
-          ))}
+            <div className="studentGrid" style={studentGridStyles}>
+              {students.map((student, i) => {
+                let output = [];
+                if (with_gutter && i && i % seatsPerRow === 0) {
+                  output.push(
+                    <Student
+                      student={[]}
+                      key={`${i}n`}
+                      idx={99}
+                      onMove={moveStudent}
+                      classes={["gutter"]}
+                    />
+                  );
+                }
+                output.push(
+                  <Student
+                    student={student ? student : []}
+                    key={student}
+                    idx={numSeats - 1 - i}
+                    onMove={moveStudent}
+                    color_print={color_print}
+                    seatsPerRow={seatsPerRow}
+                  />
+                );
+                if (with_gutter && i === numSeats - 1) {
+                  output.push(
+                    <Student
+                      student={[]}
+                      key={`${i}n`}
+                      idx={99}
+                      onMove={moveStudent}
+                      classes={["gutter"]}
+                    />
+                  );
+                }
+
+                return output;
+              })}
+            </div>
+
+            <div className="assignmentsGrid">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+                <div key={i}></div>
+              ))}
+            </div>
+          </Box>
+
+          <Box sx={{ p: 2 }} className="config">
+            <ButtonGroup>
+              <Button
+                onClick={(e) =>
+                  setSettingsAnchor(
+                    settingsAnchor ? undefined : e.currentTarget
+                  )
+                }
+              >
+                <SettingsIcon />
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if (window.confirm("Really randomize layout?")) {
+                    layout(true);
+                  }
+                }}
+              >
+                Randomize
+              </Button>
+            </ButtonGroup>
+
+            <Box sx={{ pt: 1 }}>
+              <Box sx={{ pb: 1 }}>
+                <TextField
+                  label="Student list"
+                  multiline
+                  cols={30}
+                  rows={10}
+                  value={list}
+                  onChange={(e) => setList(e.target.value)}
+                />
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button variant="contained" onClick={() => saveClass()}>
+                  Save
+                </Button>
+              </Box>
+              {tooManyKids && <Box>WARNING: TOO MANY STUDENTS FOR LAYOUT</Box>}
+              {overflowStudents.length > 0 && (
+                <Box>
+                  <Box>Students not in layout:</Box>
+                  <ul>
+                    {overflowStudents.map((student) => (
+                      <li>{student[0]}</li>
+                    ))}
+                  </ul>
+                </Box>
+              )}
+            </Box>
+          </Box>
         </div>
-      </div>
+      </Box>
     </DndProvider>
   );
 };

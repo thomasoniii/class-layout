@@ -1,13 +1,8 @@
 .App {
   //text-align: center;
-}
-
-.App-header {
-  background-color: #222;
-  height: 60px;
-  padding: 15px;
-  color: white;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-gap: 5px;
 }
 
 h2 {
@@ -27,8 +22,12 @@ body {
   display: none;
 }
 
+.student-list {
+  /*  margin-top: 10px; */
+}
+
 @media print {
-  #config {
+  .config {
     display: none;
   }
 
@@ -40,6 +39,10 @@ body {
   .print-control {
     display: initial;
   }
+
+  .student-list {
+    display: none;
+  }
 }
 
 .student {
@@ -49,13 +52,39 @@ body {
   user-select: none;
 }
 
+.studentGrid {
+  display: grid;
+  box-sizing: border-box;
+  height: 4.8in;
+}
+
+.studentGrid div {
+  height: 100%;
+}
+
 .name {
-  height: 130px;
+  /* height: 1.11in; */
+  /* min-height: 0.5in; */
+  /* max-height: 1.5in; */
   border: 0px solid black;
   grid-row-start: 1;
   grid-row-end: 6;
   padding: 5px;
   text-align: center;
+}
+
+.assignmentsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10%;
+  box-sizing: border-box;
+  margin-top: 0.1in;
+  max-height: 2in;
+}
+
+.assignmentsGrid div {
+  border-bottom: 1px solid black;
+  height: 0.2in;
 }
 
 .grade {
@@ -75,11 +104,6 @@ body {
   padding-left: 5px;
   padding-right: 5px;
   align-items: center;
-}
-
-.studentGrid {
-  display: grid;
-  box-sizing: border-box;
 }
 
 .gutter .student {
@@ -120,23 +144,12 @@ body {
   border-bottom-width: 0px !important;
 }
 
-.assignmentsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10%;
-  box-sizing: border-box;
-}
-
-.assignmentsGrid div {
-  border-bottom: 1px solid black;
-  height: 30px;
-}
-
 .saved_class {
   cursor: pointer;
 }
 
 .controls {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
