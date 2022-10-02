@@ -26,6 +26,10 @@ body {
   /*  margin-top: 10px; */
 }
 
+.ui-control {
+  width: 100%;
+}
+
 @media print {
   .config {
     display: none;
@@ -33,7 +37,6 @@ body {
 
   .ui-control {
     display: none;
-    background-color: blue;
   }
 
   .print-control {
@@ -55,7 +58,7 @@ body {
 .studentGrid {
   display: grid;
   box-sizing: border-box;
-  height: 4.8in;
+  /*height: 4.8in;*/
 }
 
 .studentGrid div {
@@ -63,9 +66,6 @@ body {
 }
 
 .name {
-  /* height: 1.11in; */
-  /* min-height: 0.5in; */
-  /* max-height: 1.5in; */
   border: 0px solid black;
   grid-row-start: 1;
   grid-row-end: 6;
@@ -88,14 +88,13 @@ body {
 }
 
 .grade {
-  //height : 20px;
-  //width : 20px;
   border: 1px solid black;
 }
 
 .headerGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr 2fr;
+  grid-gap: 2%;
   border: 1px solid black;
   font-size: 250%;
   text-align: left;

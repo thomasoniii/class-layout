@@ -48,6 +48,7 @@ const App = () => {
   const [date_time, setDateTime] = useState("");
   const [with_gutter, setWithGutter] = useState(false);
   const [auto_seats, setAutoSeats] = useState(true);
+  const [numRows, setNumRows] = useState(4);
   const [seats_per_row, setSeatsPerRow] = useState(7);
   const [min_seats_per_row, setMinSeatsPerRow] = useState(2);
   const [saved_classes, setSavedClasses] = useState([]);
@@ -79,7 +80,7 @@ const App = () => {
     if (auto_seats) {
       const students = list?.split(/\r?\n/) || [];
       setSeatsPerRow(
-        Math.max(Math.ceil(students.length / 4), min_seats_per_row)
+        Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
       );
     }
 
@@ -163,11 +164,11 @@ const App = () => {
       "AUTO SEATS ? ",
       auto_seats,
       seats_per_row,
-      Math.max(Math.ceil(students.length / 4), min_seats_per_row)
+      Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
     );
     if (auto_seats) {
       setSeatsPerRow(
-        Math.max(Math.ceil(students.length / 4), min_seats_per_row)
+        Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
       );
     }
   };
@@ -206,7 +207,7 @@ const App = () => {
 
   let students = list.split(/\r?\n/).map((line) => line.split(/\s*;\s*/));
 
-  const numSeats = seats_per_row * 4;
+  const numSeats = seats_per_row * numRows;
   const seatsPerRow = seats_per_row;
 
   while (students.length < numSeats) {
@@ -223,8 +224,10 @@ const App = () => {
 
   const studentGridStyles = {
     gridTemplateColumns: `repeat(${
-      ((with_gutter ? 4 : 0) + numSeats) / 4
+      ((with_gutter ? numRows : 0) + numSeats) / numRows
     },1fr)`,
+
+    gridAutoRows: `${4.8 / numRows}in`,
   };
 
   return (
@@ -332,14 +335,26 @@ const App = () => {
               label="color print"
             />
           </FormGroup>
-          <TextField
-            label="seats per row"
-            inputProps={{ min: 1 }}
-            variant="outlined"
-            value={seats_per_row}
-            type="number"
-            onChange={(e) => setSeatsPerRow(e.target.value)}
-          />
+          <FormGroup sx={{ pt: 1 }}>
+            <TextField
+              label="number of rows"
+              inputProps={{ min: 1 }}
+              variant="outlined"
+              value={numRows}
+              type="number"
+              onChange={(e) => setNumRows(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup sx={{ pt: 1 }}>
+            <TextField
+              label="seats per row"
+              inputProps={{ min: 1 }}
+              variant="outlined"
+              value={seats_per_row}
+              type="number"
+              onChange={(e) => setSeatsPerRow(e.target.value)}
+            />
+          </FormGroup>
           <FormGroup>
             <FormControlLabel
               control={
@@ -391,8 +406,8 @@ const App = () => {
         <div className="App">
           <Box sx={{ p: 2 }}>
             <div className="headerGrid">
+              <div>Class:</div>
               <div>
-                Class:
                 <span className="ui-control">
                   <TextField
                     label=""
@@ -400,14 +415,15 @@ const App = () => {
                     value={class_name}
                     placeholder="Name this class"
                     onChange={(e) => setClassName(e.target.value)}
+                    fullWidth
                   />
                 </span>
                 <div style={{ fontSize: "70%" }} className="print-control">
                   {class_name}
                 </div>
               </div>
+              <div>Time/Days:</div>
               <div>
-                Time/Days:
                 <span className="ui-control">
                   <TextField
                     label=""
@@ -415,6 +431,7 @@ const App = () => {
                     placeholder="When does this class meet"
                     value={date_time}
                     onChange={(e) => setDateTime(e.target.value)}
+                    fullWidth
                   />
                 </span>
                 <div
@@ -437,6 +454,7 @@ const App = () => {
                       idx={99}
                       onMove={moveStudent}
                       classes={["gutter"]}
+                      numRows={numRows}
                     />
                   );
                 }
