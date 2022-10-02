@@ -1,154 +1,58 @@
 .App {
-  //text-align: center;
   display: grid;
   grid-template-columns: 1fr min-content;
   grid-gap: 5px;
 }
 
-h2 {
-  margin: 0px !important;
+* {
+  box-sizing: border-box;
 }
 
-.App-intro {
-  font-size: large;
+ul.students {
+  list-style: none;
+  padding: 0;
+  display: grid;
+
+  box-sizing: border-box;
 }
 
-body {
-  padding: 0px;
-  margin: 0px;
-}
-
-.print-control {
-  display: none;
-}
-
-.student-list {
-  /*  margin-top: 10px; */
-}
-
-.ui-control {
-  width: 100%;
-}
-
-@media print {
-  .config {
-    display: none;
-  }
-
-  .ui-control {
-    display: none;
-  }
-
-  .print-control {
-    display: initial;
-  }
-
-  .student-list {
-    display: none;
-  }
-}
-
-.student {
+li.student {
   border: 2px solid;
+
   display: grid;
-  grid-template-columns: 70% 15% 15%;
-  user-select: none;
-}
+  grid-template-columns: 70% 30%;
+  grid-auto-rows: 100%;
+  border-top-width: 4px;
+  border-bottom-width: 4px;
 
-.studentGrid {
-  display: grid;
-  box-sizing: border-box;
-  /*height: 4.8in;*/
-}
-
-.studentGrid div {
-  height: 100%;
-}
-
-.name {
-  border: 0px solid black;
-  grid-row-start: 1;
-  grid-row-end: 6;
-  padding: 5px;
-  text-align: center;
-}
-
-.assignmentsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10%;
-  box-sizing: border-box;
-  margin-top: 0.1in;
-  max-height: 2in;
-}
-
-.assignmentsGrid div {
-  border-bottom: 1px solid black;
-  height: 0.2in;
-}
-
-.grade {
-  border: 1px solid black;
-}
-
-.headerGrid {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr 2fr;
-  grid-gap: 2%;
-  border: 1px solid black;
-  font-size: 250%;
-  text-align: left;
-  font-weight: bold;
-  box-sizing: border-box;
-  padding-left: 5px;
-  padding-right: 5px;
   align-items: center;
 }
 
-.gutter .student {
-  border: 2px solid gray;
-  border-left: 0px;
-  border-right-width: 4px;
+div.student-name {
 }
 
-.gutter .grade {
-  border: 1px solid gray;
+ul.student-grades {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid black;
 }
 
-.firstStudent .student {
+ul.student-grades li.grade {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ul.student-grades li {
+  border: 1px solid black;
+}
+
+li.first-student {
   border-left-width: 4px;
 }
 
-.lastStudent .student {
+li.last-student {
   border-right-width: 4px;
-}
-
-.lastRow .student {
-  border-bottom-width: 4px;
-}
-
-.grade:nth-child(-n + 3) {
-  border-top-width: 0px !important;
-}
-
-.grade:nth-child(2n) {
-  border-left-width: 2px !important;
-}
-
-.grade:nth-child(2n + 1) {
-  border-right-width: 0px !important;
-}
-
-.grade:nth-last-child(-n + 2) {
-  border-bottom-width: 0px !important;
-}
-
-.saved_class {
-  cursor: pointer;
-}
-
-.controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }

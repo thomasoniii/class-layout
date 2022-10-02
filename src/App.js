@@ -29,9 +29,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import shuffle from "lodash.shuffle";
 
-import Student from "./Student";
+import { Student } from "./Student";
 import { Instructions } from "./Instructions";
 import { ClassList } from "./ClassList";
+import { AssignmentsGrid } from "./AssignmentsGrid";
 
 import "./App.css";
 import "@fontsource/roboto/300.css";
@@ -46,7 +47,7 @@ const App = () => {
   const [list, setList] = useState("");
   const [class_name, setClassName] = useState("");
   const [date_time, setDateTime] = useState("");
-  const [with_gutter, setWithGutter] = useState(false);
+
   const [auto_seats, setAutoSeats] = useState(true);
   const [numRows, setNumRows] = useState(4);
   const [seats_per_row, setSeatsPerRow] = useState(7);
@@ -223,11 +224,8 @@ const App = () => {
   }
 
   const studentGridStyles = {
-    gridTemplateColumns: `repeat(${
-      ((with_gutter ? numRows : 0) + numSeats) / numRows
-    },1fr)`,
-
-    gridAutoRows: `${4.8 / numRows}in`,
+    gridTemplateColumns: `repeat(${numSeats / numRows},1fr)`,
+    //gridAutoRows: `${4.8 / numRows}in`,
   };
 
   return (
@@ -342,7 +340,7 @@ const App = () => {
               variant="outlined"
               value={numRows}
               type="number"
-              onChange={(e) => setNumRows(e.target.value)}
+              onChange={(e) => setNumRows(Number(e.target.value))}
             />
           </FormGroup>
           <FormGroup sx={{ pt: 1 }}>
@@ -352,7 +350,7 @@ const App = () => {
               variant="outlined"
               value={seats_per_row}
               type="number"
-              onChange={(e) => setSeatsPerRow(e.target.value)}
+              onChange={(e) => setSeatsPerRow(Number(e.target.value))}
             />
           </FormGroup>
           <FormGroup>
@@ -366,17 +364,7 @@ const App = () => {
               label="auto adjust seats"
             />
           </FormGroup>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={with_gutter}
-                  onChange={() => setWithGutter(!with_gutter)}
-                />
-              }
-              label="include gray row"
-            />
-          </FormGroup>
+
           <FormGroup>
             <FormControlLabel
               control={
@@ -443,54 +431,21 @@ const App = () => {
               </div>
             </div>
 
-            <div className="studentGrid" style={studentGridStyles}>
-              {students.map((student, i) => {
-                let output = [];
-                if (with_gutter && i && i % seatsPerRow === 0) {
-                  output.push(
-                    <Student
-                      student={[]}
-                      key={`${i}n`}
-                      idx={99}
-                      onMove={moveStudent}
-                      classes={["gutter"]}
-                      numRows={numRows}
-                    />
-                  );
-                }
-                output.push(
-                  <Student
-                    student={student ? student : []}
-                    key={student}
-                    idx={numSeats - 1 - i}
-                    onMove={moveStudent}
-                    color_print={color_print}
-                    seatsPerRow={seatsPerRow}
-                    numRows={numRows}
-                  />
-                );
-                if (with_gutter && i === numSeats - 1) {
-                  output.push(
-                    <Student
-                      student={[]}
-                      key={`${i}n`}
-                      idx={99}
-                      onMove={moveStudent}
-                      classes={["gutter"]}
-                      numRows={numRows}
-                    />
-                  );
-                }
-
-                return output;
-              })}
-            </div>
-
-            <div className="assignmentsGrid">
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-                <div key={i}></div>
+            <ul className="students" style={studentGridStyles}>
+              {students.map((student, i) => (
+                <Student
+                  student={student ? student : []}
+                  key={student}
+                  idx={numSeats - 1 - i}
+                  onMove={moveStudent}
+                  color_print={color_print}
+                  seatsPerRow={seatsPerRow}
+                  numRows={numRows}
+                />
               ))}
-            </div>
+            </ul>
+
+            <AssignmentsGrid />
           </Box>
 
           <Box sx={{ p: 2 }} className="config">

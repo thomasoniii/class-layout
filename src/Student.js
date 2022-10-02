@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 
 import types from "./types";
 
-const Student = ({
+export const Student = ({
   classes = [],
 
   text,
@@ -12,15 +12,14 @@ const Student = ({
   seatsPerRow,
   onMove,
 
-  populateGutter,
   color_print,
   numRows,
 }) => {
-  console.log("STUDENT : NUMROWS", numRows);
+  console.log("STUDENT : NUMROWS", numRows, idx);
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: types.STUDENT,
-      item: { student, idx, seatsPerRow, populateGutter, color_print, onMove },
+      item: { student, idx, seatsPerRow, color_print, onMove },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
@@ -71,20 +70,21 @@ const Student = ({
     "purple",
   ];
 
-  const _classes = ["student-container", ...classes];
+  const _classes = ["student", ...classes];
 
   const studentStyles = {};
 
-  if (populateGutter && idx % 7 === 0) {
-  } else if (color_print) {
+  if (color_print) {
     const ridx = Math.floor(idx / seatsPerRow);
-    console.log(idx, seatsPerRow, ridx, numRows, ridx < numRows);
+
     if (ridx < numRows) {
       const rowColor = ridx >= rows.length ? "black" : rows[ridx];
-      studentStyles.borderBottomColor = rowColor;
+      console.log(idx, seatsPerRow, ridx, numRows, ridx < numRows, rowColor);
+      studentStyles.borderColor = rowColor;
+      /* studentStyles.borderBottomColor = rowColor;
       studentStyles.borderLeftColor = rowColor;
       studentStyles.borderRightColor = rowColor;
-      studentStyles.borderTopColor = ridx === numRows - 1 ? "black" : rowColor;
+      studentStyles.borderTopColor = ridx === numRows - 1 ? "black" : rowColor; */
     } else if (idx !== 99) {
       studentStyles.borderColor = "black";
     } else {
@@ -93,29 +93,33 @@ const Student = ({
   }
 
   if (idx % seatsPerRow === seatsPerRow - 1) {
-    _classes.push("firstStudent");
+    _classes.push("first-student");
   } else if (idx % seatsPerRow === 0) {
-    _classes.push("lastStudent");
+    _classes.push("last-student");
   }
 
   return (
-    <div
+    <li
+      key={idx}
       ref={(node) => dragRef(dropRef(node))}
       className={_classes.join(" ")}
       style={{
         opacity: isDragging ? 0.5 : 1.0,
         cursor: idx === 99 || student[0] === undefined ? "" : "move",
         backgroundColor: isOver && canDrop ? "lightgreen" : "",
+        ...studentStyles,
       }}
     >
-      <div className="student" style={studentStyles}>
-        <div className="name">{student[0]}</div>
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
-          <div className={`grade`} key={g}></div>
-        ))}
+      <div className="student-name">
+        {student[0]}NAME {idx}
       </div>
-    </div>
+      <ul className="student-grades">
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
+          <li className={`grade`} key={g}>
+            {g}
+          </li>
+        ))}
+      </ul>
+    </li>
   );
 };
-
-export default Student;
