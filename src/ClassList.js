@@ -4,6 +4,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
 
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -20,34 +21,43 @@ export const ClassList = ({ classes, selectCallback, deleteCallback }) => {
     p: 4,
   };
   return (
-    <List>
-      {classes.map((k, v) => {
-        return (
-          <ListItem
-            key={k}
-            secondaryAction={
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-                onClick={() => deleteCallback(k)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            }
-          >
-            <ListItemButton
-              role={undefined}
-              onClick={() => selectCallback(k)}
-              dense
+    <>
+      <Button
+        sx={{ m: 1 }}
+        variant="contained"
+        onClick={() => selectCallback(Date.now())}
+      >
+        New class
+      </Button>
+      <List>
+        {classes.map((k, v) => {
+          return (
+            <ListItem
+              key={k}
+              secondaryAction={
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  onClick={() => deleteCallback(k)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              }
             >
-              <ListItemText primary={k} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+              <ListItemButton
+                role={undefined}
+                onClick={() => selectCallback(k)}
+                dense
+              >
+                <ListItemText primary={k} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </>
   );
 };

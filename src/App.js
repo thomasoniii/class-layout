@@ -48,7 +48,7 @@ const App = () => {
   const [class_name, setClassName] = useState("");
   const [date_time, setDateTime] = useState("");
 
-  const [auto_seats, setAutoSeats] = useState(true);
+  const [auto_seats, setAutoSeats] = useState(false);
   const [numRows, setNumRows] = useState(4);
   const [seats_per_row, setSeatsPerRow] = useState(7);
   const [min_seats_per_row, setMinSeatsPerRow] = useState(2);
@@ -225,8 +225,10 @@ const App = () => {
 
   const studentGridStyles = {
     gridTemplateColumns: `repeat(${numSeats / numRows},1fr)`,
-    //gridAutoRows: `${4.8 / numRows}in`,
+    gridAutoRows: `${4.6 / numRows}in`,
   };
+
+  console.log("LAYS OUT STUDENTS : ", students);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -298,6 +300,7 @@ const App = () => {
       </Drawer>
 
       <Popover
+        className="ui-control"
         open={Boolean(settingsAnchor)}
         anchorEl={settingsAnchor}
         onClose={() => setSettingsAnchor(undefined)}
@@ -393,7 +396,7 @@ const App = () => {
       <Box>
         <div className="App">
           <Box sx={{ p: 2 }}>
-            <div className="headerGrid">
+            <div className="header-grid">
               <div>Class:</div>
               <div>
                 <span className="ui-control">
@@ -435,7 +438,7 @@ const App = () => {
               {students.map((student, i) => (
                 <Student
                   student={student ? student : []}
-                  key={student}
+                  key={i}
                   idx={numSeats - 1 - i}
                   onMove={moveStudent}
                   color_print={color_print}
@@ -449,28 +452,6 @@ const App = () => {
           </Box>
 
           <Box sx={{ p: 2 }} className="config">
-            <ButtonGroup>
-              <Button
-                onClick={(e) =>
-                  setSettingsAnchor(
-                    settingsAnchor ? undefined : e.currentTarget
-                  )
-                }
-              >
-                <SettingsIcon />
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  if (window.confirm("Really randomize layout?")) {
-                    layout(true);
-                  }
-                }}
-              >
-                Randomize
-              </Button>
-            </ButtonGroup>
-
             <Box sx={{ pt: 1 }}>
               <Box sx={{ pb: 1 }}>
                 <TextField
@@ -480,16 +461,38 @@ const App = () => {
                   rows={10}
                   value={list}
                   onChange={(e) => setList(e.target.value)}
+                  fullWidth
                 />
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <div className="button-group">
+                <Button
+                  onClick={(e) =>
+                    setSettingsAnchor(
+                      settingsAnchor ? undefined : e.currentTarget
+                    )
+                  }
+                >
+                  <SettingsIcon />
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    if (window.confirm("Really randomize layout?")) {
+                      layout(true);
+                    }
+                  }}
+                >
+                  Randomize
+                </Button>
                 <Button variant="contained" onClick={() => saveClass()}>
                   Save
                 </Button>
-              </Box>
-              {tooManyKids && <Box>WARNING: TOO MANY STUDENTS FOR LAYOUT</Box>}
+              </div>
+              {tooManyKids && (
+                <Box className="error">WARNING: TOO MANY STUDENTS</Box>
+              )}
               {overflowStudents.length > 0 && (
-                <Box>
+                <Box className="warning">
                   <Box>Students not in layout:</Box>
                   <ul>
                     {overflowStudents.map((student) => (

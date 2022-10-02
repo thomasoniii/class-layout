@@ -57,7 +57,7 @@ export const Student = ({
     "orange",
     "yellow",
     "green",
-    "black",
+
     "blue",
     "brown",
     "cyan",
@@ -68,6 +68,7 @@ export const Student = ({
     "navy",
     "olive",
     "purple",
+    "black",
   ];
 
   const _classes = ["student", ...classes];
@@ -110,14 +111,10 @@ export const Student = ({
         ...studentStyles,
       }}
     >
-      <div className="student-name">
-        {student[0]}NAME {idx}
-      </div>
+      <div className="student-name">{student[0]}</div>
       <ul className="student-grades">
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
-          <li className={`grade`} key={g}>
-            {g}
-          </li>
+          <li className={`grade`} key={g}></li>
         ))}
       </ul>
     </li>
