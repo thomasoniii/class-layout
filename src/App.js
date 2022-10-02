@@ -466,6 +466,7 @@ const App = () => {
                     onMove={moveStudent}
                     color_print={color_print}
                     seatsPerRow={seatsPerRow}
+                    numRows={numRows}
                   />
                 );
                 if (with_gutter && i === numSeats - 1) {
@@ -476,6 +477,7 @@ const App = () => {
                       idx={99}
                       onMove={moveStudent}
                       classes={["gutter"]}
+                      numRows={numRows}
                     />
                   );
                 }

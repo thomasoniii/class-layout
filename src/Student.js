@@ -14,8 +14,9 @@ const Student = ({
 
   populateGutter,
   color_print,
-  numRows = 4,
+  numRows,
 }) => {
+  console.log("STUDENT : NUMROWS", numRows);
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: types.STUDENT,
@@ -77,7 +78,7 @@ const Student = ({
   if (populateGutter && idx % 7 === 0) {
   } else if (color_print) {
     const ridx = Math.floor(idx / seatsPerRow);
-    console.log(idx, seatsPerRow, ridx);
+    console.log(idx, seatsPerRow, ridx, numRows, ridx < numRows);
     if (ridx < numRows) {
       const rowColor = ridx >= rows.length ? "black" : rows[ridx];
       studentStyles.borderBottomColor = rowColor;
