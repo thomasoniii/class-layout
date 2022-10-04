@@ -1,9 +1,15 @@
 import React from "react";
 
-export const AssignmentsGrid = () => (
-  <div className="assignments-grid">
-    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-      <div key={i}></div>
-    ))}
-  </div>
-);
+export const AssignmentsGrid = ({ numLines = 5 }) => {
+  const lines = new Array(numLines * 2).fill(0);
+  if (!numLines) {
+    return null;
+  }
+  return (
+    <div className="assignments-grid">
+      {lines.map((_, i) => (
+        <div key={i}></div>
+      ))}
+    </div>
+  );
+};

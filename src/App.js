@@ -57,6 +57,7 @@ const App = () => {
   const [showClassList, setShowClassList] = useState(false);
   const [reverseLayout, setReverseLayout] = useState(true);
   const [settingsAnchor, setSettingsAnchor] = useState(false);
+  const [extraLines, setExtraLines] = useState(5);
 
   const printing = useMediaQuery("@media print");
 
@@ -225,7 +226,7 @@ const App = () => {
 
   const studentGridStyles = {
     gridTemplateColumns: `repeat(${numSeats / numRows},1fr)`,
-    gridAutoRows: `${4.6 / numRows}in`,
+    gridAutoRows: `${(6.1 - 0.2 * extraLines) / numRows}in`, // 5.4 if no margins at print
   };
 
   console.log("LAYS OUT STUDENTS : ", students);
@@ -390,12 +391,22 @@ const App = () => {
               label="reverse layout"
             />
           </FormGroup>
+          <FormGroup sx={{ pt: 1 }}>
+            <TextField
+              label="extra lines"
+              inputProps={{ min: 0, max: 7 }}
+              variant="outlined"
+              value={extraLines}
+              type="number"
+              onChange={(e) => setExtraLines(Number(e.target.value))}
+            />
+          </FormGroup>
         </Typography>
       </Popover>
 
       <Box>
         <div className="App">
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: printing ? 0 : 2 }}>
             <div className="header-grid">
               <div>Class:</div>
               <div>
@@ -448,7 +459,7 @@ const App = () => {
               ))}
             </ul>
 
-            <AssignmentsGrid />
+            <AssignmentsGrid numLines={extraLines} />
           </Box>
 
           <Box sx={{ p: 2 }} className="config">
