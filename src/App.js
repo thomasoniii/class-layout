@@ -226,7 +226,7 @@ const App = () => {
 
   const studentGridStyles = {
     gridTemplateColumns: `repeat(${numSeats / numRows},1fr)`,
-    gridAutoRows: `${(6.1 - 0.2 * extraLines) / numRows}in`, // 5.4 if no margins at print
+    gridAutoRows: `${(6.7 - 0.2 * extraLines) / numRows}in`, // 5.4 if no margins at print
   };
 
   console.log("LAYS OUT STUDENTS : ", students);
@@ -394,7 +394,7 @@ const App = () => {
           <FormGroup sx={{ pt: 1 }}>
             <TextField
               label="extra lines"
-              inputProps={{ min: 0, max: 7 }}
+              inputProps={{ min: 0, max: 25 }}
               variant="outlined"
               value={extraLines}
               type="number"

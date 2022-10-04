@@ -131,6 +131,12 @@ li.last-student {
 }
 
 @media print {
+  @page {
+    margin-left: 0.1in;
+    margin-right: 0.1in;
+    margin-top: 0.1in;
+    margin-bottom: 0;
+  }
   .config {
     display: none;
   }
