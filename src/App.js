@@ -288,16 +288,17 @@ const App = () => {
               Classroom Layout
             </Typography>
 
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <LoginIcon />
-            </IconButton>
-            {/*<Button color="inherit">Login</Button>*/}
+            <span style={{ display: "none" }}>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <LoginIcon />
+              </IconButton>
+            </span>
           </Toolbar>
         </AppBar>
       </Box>
