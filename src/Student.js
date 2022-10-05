@@ -14,6 +14,7 @@ export const Student = ({
 
   color_print,
   numRows,
+  hasGradeGrid,
 }) => {
   console.log("STUDENT : NUMROWS", numRows, idx);
   const [{ isDragging }, dragRef] = useDrag(
@@ -108,15 +109,18 @@ export const Student = ({
         opacity: isDragging ? 0.5 : 1.0,
         cursor: idx === 99 || student[0] === undefined ? "" : "move",
         backgroundColor: isOver && canDrop ? "lightgreen" : "",
+        gridTemplateColumns: hasGradeGrid ? "75% 25%" : "100%",
         ...studentStyles,
       }}
     >
       <div className="student-name">{student[0]}</div>
-      <ul className="student-grades">
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
-          <li className={`grade`} key={g}></li>
-        ))}
-      </ul>
+      {hasGradeGrid && (
+        <ul className="student-grades">
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
+            <li className={`grade`} key={g}></li>
+          ))}
+        </ul>
+      )}
     </li>
   );
 };

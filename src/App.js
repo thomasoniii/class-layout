@@ -58,6 +58,7 @@ const App = () => {
   const [reverseLayout, setReverseLayout] = useState(true);
   const [settingsAnchor, setSettingsAnchor] = useState(false);
   const [extraLines, setExtraLines] = useState(5);
+  const [hasGradeGrid, setHasGradeGrid] = useState(true);
 
   const printing = useMediaQuery("@media print");
 
@@ -401,6 +402,17 @@ const App = () => {
               onChange={(e) => setExtraLines(Number(e.target.value))}
             />
           </FormGroup>
+          <FormGroup sx={{ pt: 1 }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={hasGradeGrid}
+                  onChange={() => setHasGradeGrid(!hasGradeGrid)}
+                />
+              }
+              label="grade grid"
+            />
+          </FormGroup>
         </Typography>
       </Popover>
 
@@ -455,6 +467,7 @@ const App = () => {
                   color_print={color_print}
                   seatsPerRow={seatsPerRow}
                   numRows={numRows}
+                  hasGradeGrid={hasGradeGrid}
                 />
               ))}
             </ul>
