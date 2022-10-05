@@ -24,6 +24,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import SettingsIcon from "@mui/icons-material/Settings";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -39,6 +40,24 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+
+const defaultColors = [
+  "red",
+  "orange",
+  "yellow",
+  "green",
+  "blue",
+  "brown",
+  "cyan",
+  "gray",
+  "pink",
+  "magenta",
+  "maroon",
+  "navy",
+  "olive",
+  "purple",
+  "black",
+].join("\n");
 
 const App = () => {
   const [boy_girl, setBoyGirl] = useState(true);
@@ -57,8 +76,10 @@ const App = () => {
   const [showClassList, setShowClassList] = useState(false);
   const [reverseLayout, setReverseLayout] = useState(true);
   const [settingsAnchor, setSettingsAnchor] = useState(false);
+  const [colorListAnchor, setColorListAnchor] = useState(false);
   const [extraLines, setExtraLines] = useState(5);
   const [hasGradeGrid, setHasGradeGrid] = useState(true);
+  const [colorList, setColorList] = useState(defaultColors);
 
   const printing = useMediaQuery("@media print");
 
@@ -416,6 +437,33 @@ const App = () => {
         </Typography>
       </Popover>
 
+      <Popover
+        className="ui-control"
+        open={Boolean(colorListAnchor)}
+        anchorEl={colorListAnchor}
+        onClose={() => setColorListAnchor(undefined)}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <TextField
+            label="color list"
+            multiline
+            cols={30}
+            rows={10}
+            value={colorList}
+            onChange={(e) => setColorList(e.target.value)}
+            fullWidth
+          />
+        </Box>
+      </Popover>
+
       <Box>
         <div className="App">
           <Box sx={{ p: printing ? 0 : 2 }}>
@@ -468,6 +516,7 @@ const App = () => {
                   seatsPerRow={seatsPerRow}
                   numRows={numRows}
                   hasGradeGrid={hasGradeGrid}
+                  colorList={colorList.split("\n")}
                 />
               ))}
             </ul>
@@ -489,7 +538,8 @@ const App = () => {
                 />
               </Box>
               <div className="button-group">
-                <Button
+                <IconButton
+                  color="primary"
                   onClick={(e) =>
                     setSettingsAnchor(
                       settingsAnchor ? undefined : e.currentTarget
@@ -497,7 +547,18 @@ const App = () => {
                   }
                 >
                   <SettingsIcon />
-                </Button>
+                </IconButton>
+                <IconButton
+                  color="primary"
+                  onClick={(e) =>
+                    setColorListAnchor(
+                      colorListAnchor ? undefined : e.currentTarget
+                    )
+                  }
+                >
+                  <ColorLensIcon />
+                </IconButton>
+
                 <Button
                   variant="outlined"
                   onClick={() => {

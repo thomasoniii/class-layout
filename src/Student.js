@@ -15,6 +15,7 @@ export const Student = ({
   color_print,
   numRows,
   hasGradeGrid,
+  colorList,
 }) => {
   console.log("STUDENT : NUMROWS", numRows, idx);
   const [{ isDragging }, dragRef] = useDrag(
@@ -46,32 +47,6 @@ export const Student = ({
 
   let borderColor = "";
 
-  const orows = {
-    one: "orange red red red",
-    two: "yellow orange orange orange",
-    three: "green yellow yellow yellow",
-    four: "black green green green",
-  };
-
-  const rows = [
-    "red",
-    "orange",
-    "yellow",
-    "green",
-
-    "blue",
-    "brown",
-    "cyan",
-    "gray",
-    "pink",
-    "magenta",
-    "maroon",
-    "navy",
-    "olive",
-    "purple",
-    "black",
-  ];
-
   const _classes = ["student", ...classes];
 
   const studentStyles = {};
@@ -80,7 +55,7 @@ export const Student = ({
     const ridx = Math.floor(idx / seatsPerRow);
 
     if (ridx < numRows) {
-      const rowColor = ridx >= rows.length ? "black" : rows[ridx];
+      const rowColor = ridx >= colorList.length ? "black" : colorList[ridx];
       console.log(idx, seatsPerRow, ridx, numRows, ridx < numRows, rowColor);
       studentStyles.borderColor = rowColor;
       /* studentStyles.borderBottomColor = rowColor;
