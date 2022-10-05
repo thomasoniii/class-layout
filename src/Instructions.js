@@ -86,6 +86,14 @@ export const Instructions = () => {
         </ListItem>
         <ListItem>
           <ListItemText>
+            Clicking on a student once will keep the desk available (but in
+            gray), but will not place a child into it. Clicking a gray desk will
+            remove it from the layout. Clicking an empty space will put it back
+            in.
+          </ListItemText>
+        </ListItem>
+        <ListItem>
+          <ListItemText>
             When you are satisfied, click the "Save" button to save it to your
             computer under the class name.
           </ListItemText>
