@@ -17,7 +17,6 @@ export const Student = ({
   hasGradeGrid,
   colorList,
 }) => {
-  console.log("STUDENT : NUMROWS", numRows, idx);
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: types.STUDENT,
@@ -27,7 +26,7 @@ export const Student = ({
       }),
       canDrag: () => Array.isArray(student) && student[0] && idx !== 99,
     }),
-    []
+    [student, idx, seatsPerRow, color_print, onMove]
   );
 
   const [{ canDrop, isOver }, dropRef] = useDrop(
@@ -42,7 +41,7 @@ export const Student = ({
         onMove(item.student, student, idx, item.idx);
       },
     }),
-    [onMove]
+    [student, idx, onMove]
   );
 
   let borderColor = "";
@@ -56,7 +55,7 @@ export const Student = ({
 
     if (ridx < numRows) {
       const rowColor = ridx >= colorList.length ? "black" : colorList[ridx];
-      console.log(idx, seatsPerRow, ridx, numRows, ridx < numRows, rowColor);
+
       studentStyles.borderColor = rowColor;
       /* studentStyles.borderBottomColor = rowColor;
       studentStyles.borderLeftColor = rowColor;

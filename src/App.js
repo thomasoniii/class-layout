@@ -75,8 +75,8 @@ const App = () => {
   const [showInstructions, setShowInstructions] = useState(false);
   const [showClassList, setShowClassList] = useState(false);
   const [reverseLayout, setReverseLayout] = useState(true);
-  const [settingsAnchor, setSettingsAnchor] = useState(false);
-  const [colorListAnchor, setColorListAnchor] = useState(false);
+  const [settingsAnchor, setSettingsAnchor] = useState(undefined);
+  const [colorListAnchor, setColorListAnchor] = useState(undefined);
   const [extraLines, setExtraLines] = useState(5);
   const [hasGradeGrid, setHasGradeGrid] = useState(true);
   const [colorList, setColorList] = useState(defaultColors);
@@ -306,7 +306,9 @@ const App = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Instructions />
+        <>
+          <Instructions />
+        </>
       </Modal>
 
       <Drawer
@@ -581,7 +583,7 @@ const App = () => {
                   <Box>Students not in layout:</Box>
                   <ul>
                     {overflowStudents.map((student) => (
-                      <li>{student[0]}</li>
+                      <li key={student[0]}>{student[0]}</li>
                     ))}
                   </ul>
                 </Box>
