@@ -85,6 +85,8 @@ const App = () => {
   const [hasGradeGrid, setHasGradeGrid] = useState(true);
   const [colorList, setColorList] = useState(defaultColors);
 
+  const [seatOverrides, setSeatOverrides] = useState({});
+
   const printing = useMediaQuery("@media print");
 
   const saveClass = () => {
@@ -188,12 +190,7 @@ const App = () => {
         .join("\n")
         .replace(/\n\n+$/, "")
     );
-    console.log(
-      "AUTO SEATS ? ",
-      auto_seats,
-      seats_per_row,
-      Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
-    );
+
     if (auto_seats) {
       setSeatsPerRow(
         Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
@@ -238,6 +235,15 @@ const App = () => {
   const numSeats = seats_per_row * numRows;
   const seatsPerRow = seats_per_row;
 
+  Object.entries(seatOverrides).forEach(([idx, override]) => {
+    students.splice(idx, 0, [
+      "",
+      "X",
+      override === "overflow" ? "gray" : "white",
+      override === "hidden",
+    ]);
+  });
+
   while (students.length < numSeats) {
     students.push([]);
   }
@@ -253,6 +259,20 @@ const App = () => {
   const studentGridStyles = {
     gridTemplateColumns: `repeat(${numSeats / numRows},1fr)`,
     gridAutoRows: `${(6.7 - 0.2 * extraLines) / numRows}in`, // 5.4 if no margins at print
+  };
+
+  const toggleCallback = (i) => {
+    const newSeatOverrides = { ...seatOverrides };
+    let seatOverride = seatOverrides[i];
+    if (newSeatOverrides[i] === "overflow") {
+      newSeatOverrides[i] = "hidden";
+    } else if (newSeatOverrides[i] === "hidden") {
+      delete newSeatOverrides[i];
+    } else {
+      newSeatOverrides[i] = "overflow";
+    }
+
+    setSeatOverrides(newSeatOverrides);
   };
 
   return (
@@ -526,6 +546,7 @@ const App = () => {
                   numRows={numRows}
                   hasGradeGrid={hasGradeGrid}
                   colorList={colorList.split("\n")}
+                  toggleCallback={toggleCallback}
                 />
               ))}
             </ul>

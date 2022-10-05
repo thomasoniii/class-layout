@@ -16,6 +16,9 @@ export const Student = ({
   numRows,
   hasGradeGrid,
   colorList,
+  colorOverride,
+
+  toggleCallback = () => {},
 }) => {
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
@@ -67,6 +70,10 @@ export const Student = ({
     _classes.push("last-student");
   }
 
+  if (student[2] || colorOverride) {
+    studentStyles.borderColor = student[2] || colorOverride;
+  }
+
   return (
     <li
       key={idx}
@@ -79,9 +86,10 @@ export const Student = ({
         gridTemplateColumns: hasGradeGrid ? "75% 25%" : "100%",
         ...studentStyles,
       }}
+      onClick={() => toggleCallback(idx)}
     >
       <div className="student-name">{student[0]}</div>
-      {hasGradeGrid && (
+      {hasGradeGrid && !student[3] && (
         <ul className="student-grades">
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
             <li className={`grade`} key={g}></li>
