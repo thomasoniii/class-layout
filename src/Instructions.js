@@ -25,19 +25,26 @@ export const Instructions = () => {
       <List>
         <ListItem>
           <ListItemText>
+            Click on the hamburger menu in the upper left. Select an existing
+            classroom, or add a new one. Delete a classroom to get rid of it.
+          </ListItemText>
+        </ListItem>
+        <ListItem>
+          <ListItemText>
             Add a list of students, one student per line. Optionally may list
             gender after semi-colon. i.e., 'Jim Thomason' or 'Jim Thomason;M'
           </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText>
-            As students are added, they appear on the class layout. Students at
-            the top show up in the front rows at the bottom.
+            As students are added, they appear on the class layout. If the list
+            is not reversed, they show up in the upper left and fill in the grid
+            as added. If the list is reversed, they start in the lower right.
           </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText>
-            Fill in the class name and Time/Days on the right.
+            Fill in the class name and Time/Days at the top.
           </ListItemText>
         </ListItem>
         <ListItem>
@@ -54,15 +61,27 @@ export const Instructions = () => {
             it is dropped on. The student dropped on will not move.
           </ListItemText>
         </ListItem>
+
         <ListItem>
           <ListItemText>
-            The color print checkbox toggles coloring for color printers.
+            Click the randomize button to randomize the layout.
           </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText>
-            You can randomize the layout, and optionally choose to do a boy/girl
-            layout. Just click the randomize button.
+            Options are available in the gear menu. You can change whether
+            students are swapped on drag and drop, the number of rows and
+            columns, if seats are auto adjusted to fit the layout when
+            randomized, if you randomize with girl/boy seating, if the layout is
+            reversed, how many extra lines to place at the bottom, and whether
+            to show the grade grid per student.
+          </ListItemText>
+        </ListItem>
+        <ListItem>
+          <ListItemText>
+            Color options are available in the color palette menu. You can
+            choose the row colors, as well as whether coloring is applied to the
+            row, column, or nothing.
           </ListItemText>
         </ListItem>
         <ListItem>
