@@ -251,8 +251,6 @@ const App = () => {
     gridAutoRows: `${(6.7 - 0.2 * extraLines) / numRows}in`, // 5.4 if no margins at print
   };
 
-  console.log("LAYS OUT STUDENTS : ", students);
-
   return (
     <DndProvider backend={HTML5Backend}>
       <Box sx={{ flexGrow: 1 }}>
@@ -512,7 +510,7 @@ const App = () => {
                 <Student
                   student={student ? student : []}
                   key={i}
-                  idx={numSeats - 1 - i}
+                  idx={reverseLayout ? numSeats - 1 - i : i}
                   onMove={moveStudent}
                   color_print={color_print}
                   seatsPerRow={seatsPerRow}
