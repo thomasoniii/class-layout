@@ -80,10 +80,7 @@ export const Student = ({
         ...studentStyles,
       }}
     >
-      <div className="student-name">
-        {student[0]}
-        {idx}
-      </div>
+      <div className="student-name">{student[0]}</div>
       {hasGradeGrid && (
         <ul className="student-grades">
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (
