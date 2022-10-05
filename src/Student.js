@@ -12,7 +12,7 @@ export const Student = ({
   seatsPerRow,
   onMove,
 
-  color_print,
+  colorOptions,
   numRows,
   hasGradeGrid,
   colorList,
@@ -20,13 +20,13 @@ export const Student = ({
   const [{ isDragging }, dragRef] = useDrag(
     () => ({
       type: types.STUDENT,
-      item: { student, idx, seatsPerRow, color_print, onMove },
+      item: { student, idx, seatsPerRow, colorOptions, onMove },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
       canDrag: () => Array.isArray(student) && student[0] && idx !== 99,
     }),
-    [student, idx, seatsPerRow, color_print, onMove]
+    [student, idx, seatsPerRow, colorOptions, onMove]
   );
 
   const [{ canDrop, isOver }, dropRef] = useDrop(
@@ -50,22 +50,15 @@ export const Student = ({
 
   const studentStyles = {};
 
-  if (color_print) {
-    const ridx = Math.floor(idx / seatsPerRow);
+  if (colorOptions !== "none") {
+    const ridx =
+      colorOptions === "rows"
+        ? Math.floor(idx / seatsPerRow)
+        : idx % seatsPerRow;
 
-    if (ridx < numRows) {
-      const rowColor = ridx >= colorList.length ? "black" : colorList[ridx];
+    const rowColor = ridx >= colorList.length ? "black" : colorList[ridx];
 
-      studentStyles.borderColor = rowColor;
-      /* studentStyles.borderBottomColor = rowColor;
-      studentStyles.borderLeftColor = rowColor;
-      studentStyles.borderRightColor = rowColor;
-      studentStyles.borderTopColor = ridx === numRows - 1 ? "black" : rowColor; */
-    } else if (idx !== 99) {
-      studentStyles.borderColor = "black";
-    } else {
-      studentStyles.borderColor = "gray";
-    }
+    studentStyles.borderColor = rowColor;
   }
 
   if (idx % seatsPerRow === seatsPerRow - 1) {
@@ -87,7 +80,10 @@ export const Student = ({
         ...studentStyles,
       }}
     >
-      <div className="student-name">{student[0]}</div>
+      <div className="student-name">
+        {student[0]}
+        {idx}
+      </div>
       {hasGradeGrid && (
         <ul className="student-grades">
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => (

@@ -9,6 +9,10 @@ import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Popover from "@mui/material/Popover";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -62,7 +66,7 @@ const defaultColors = [
 const App = () => {
   const [boy_girl, setBoyGirl] = useState(true);
   const [swap_students, setSwapStudents] = useState(true);
-  const [color_print, setColorPrint] = useState(true);
+  const [colorOptions, setColorOptions] = useState("rows");
   const [list, setList] = useState("");
   const [class_name, setClassName] = useState("");
   const [date_time, setDateTime] = useState("");
@@ -336,7 +340,7 @@ const App = () => {
           horizontal: "right",
         }}
       >
-        <Typography sx={{ p: 2 }}>
+        <Typography>
           <FormGroup>
             <FormControlLabel
               control={
@@ -346,17 +350,6 @@ const App = () => {
                 />
               }
               label="swap students"
-            />
-          </FormGroup>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={color_print}
-                  onChange={() => setColorPrint(!color_print)}
-                />
-              }
-              label="color print"
             />
           </FormGroup>
           <FormGroup sx={{ pt: 1 }}>
@@ -461,6 +454,21 @@ const App = () => {
             onChange={(e) => setColorList(e.target.value)}
             fullWidth
           />
+          <FormControl fullWidth sx={{ mt: 1 }}>
+            <InputLabel id="color-options-label">Color Options</InputLabel>
+
+            <Select
+              labelId="color-options-label"
+              id="color-options-select"
+              value={colorOptions}
+              label="Color Options"
+              onChange={(e) => setColorOptions(e.target.value)}
+            >
+              <MenuItem value={"rows"}>rows</MenuItem>
+              <MenuItem value={"columns"}>columns</MenuItem>
+              <MenuItem value={"none"}>none</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
       </Popover>
 
@@ -512,7 +520,7 @@ const App = () => {
                   key={i}
                   idx={reverseLayout ? numSeats - 1 - i : i}
                   onMove={moveStudent}
-                  color_print={color_print}
+                  colorOptions={colorOptions}
                   seatsPerRow={seatsPerRow}
                   numRows={numRows}
                   hasGradeGrid={hasGradeGrid}
