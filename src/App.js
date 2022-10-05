@@ -361,7 +361,7 @@ const App = () => {
           horizontal: "right",
         }}
       >
-        <Typography>
+        <Typography sx={{ p: 1 }}>
           <FormGroup>
             <FormControlLabel
               control={
