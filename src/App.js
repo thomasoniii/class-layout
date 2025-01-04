@@ -98,7 +98,19 @@ const App = () => {
           date_time,
           list,
           boy_girl: false,
-        })
+
+          swap_students,
+          colorOptions,
+          auto_seats,
+          numRows,
+          seats_per_row,
+          min_seats_per_row,
+          reverseLayout,
+          extraLines,
+          hasGradeGrid,
+          colorList,
+          seatOverrides,
+        }),
       );
       updateSavedClasses();
     }
@@ -110,15 +122,26 @@ const App = () => {
     if (auto_seats) {
       const students = list?.split(/\r?\n/) || [];
       setSeatsPerRow(
-        Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
+        Math.max(Math.ceil(students.length / numRows), min_seats_per_row),
       );
     }
 
-    setClassName(newState?.class_name || "");
-    setDateTime(newState?.date_time || "");
-    setList(newState?.list || "");
-    setBoyGirl(false);
-    setShowClassList(false);
+    setClassName(newState?.class_name ?? "");
+    setDateTime(newState?.date_time ?? "");
+    setList(newState?.list ?? "");
+    setBoyGirl(newState?.boy_girl ?? false);
+
+    setSwapStudents(newState?.swap_students ?? true);
+    setColorOptions(newState?.colorOptions ?? "rows");
+    setAutoSeats(newState?.auto_seats ?? false);
+    setNumRows(newState?.numRows ?? 4);
+    setSeatsPerRow(newState?.seats_per_row ?? 7);
+    setMinSeatsPerRow(newState?.min_seats_per_row ?? 2);
+    setReverseLayout(newState?.reverseLayout ?? true);
+    setExtraLines(newState?.extraLines ?? 5);
+    setHasGradeGrid(newState?.hasGradeGrid ?? true);
+    setColorList(newState?.colorList ?? defaultColors);
+    setSeatOverrides(newState?.seatOverrides ?? {});
   };
 
   const deleteClass = (cn) => {
@@ -139,10 +162,10 @@ const App = () => {
     if (boy_girl && randomize) {
       students = students.filter((s) => s[0]);
       let boys = students.filter(
-        (student) => !student[1] || student[1].match(/^M/i)
+        (student) => !student[1] || student[1].match(/^M/i),
       );
       let girls = students.filter(
-        (student) => student[1] && student[1].match(/^F/i)
+        (student) => student[1] && student[1].match(/^F/i),
       );
 
       if (randomize) {
@@ -188,12 +211,12 @@ const App = () => {
         //.filter(s => s.length > 1 && s[0].length)
         .map((s) => s.join(";")) //${s[0] || ''};${s[1] || ''}`)
         .join("\n")
-        .replace(/\n\n+$/, "")
+        .replace(/\n\n+$/, ""),
     );
 
     if (auto_seats) {
       setSeatsPerRow(
-        Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
+        Math.max(Math.ceil(students.length / numRows), min_seats_per_row),
       );
     }
   };
@@ -216,7 +239,7 @@ const App = () => {
 
       setList(students.map((s) => s.join(";")).join("\n"));
     },
-    [list, swap_students, setList]
+    [list, swap_students, setList],
   );
 
   const updateSavedClasses = () => {
@@ -572,7 +595,7 @@ const App = () => {
                   color="primary"
                   onClick={(e) =>
                     setSettingsAnchor(
-                      settingsAnchor ? undefined : e.currentTarget
+                      settingsAnchor ? undefined : e.currentTarget,
                     )
                   }
                 >
@@ -582,7 +605,7 @@ const App = () => {
                   color="primary"
                   onClick={(e) =>
                     setColorListAnchor(
-                      colorListAnchor ? undefined : e.currentTarget
+                      colorListAnchor ? undefined : e.currentTarget,
                     )
                   }
                 >
