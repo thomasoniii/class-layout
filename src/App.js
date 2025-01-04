@@ -63,29 +63,55 @@ const defaultColors = [
   "black",
 ].join("\n");
 
-const App = () => {
-  const [boy_girl, setBoyGirl] = useState(true);
-  const [swap_students, setSwapStudents] = useState(true);
-  const [colorOptions, setColorOptions] = useState("rows");
-  const [list, setList] = useState("");
-  const [class_name, setClassName] = useState("");
-  const [date_time, setDateTime] = useState("");
+const defaultValues = {
+  class_name: "",
+  date_time: "",
+  list: "",
+  boy_girl: true,
 
-  const [auto_seats, setAutoSeats] = useState(false);
-  const [numRows, setNumRows] = useState(4);
-  const [seats_per_row, setSeatsPerRow] = useState(7);
-  const [min_seats_per_row, setMinSeatsPerRow] = useState(2);
+  swap_students: true,
+  colorOptions: "rows",
+  auto_seats: false,
+  numRows: 4,
+  seats_per_row: 7,
+  min_seats_per_row: 2,
+  reverseLayout: true,
+  extraLines: 5,
+  hasGradeGrid: true,
+  colorList: defaultColors,
+  seatOverrides: {},
+};
+
+const App = () => {
+  const [boy_girl, setBoyGirl] = useState(defaultValues.boy_girl);
+  const [swap_students, setSwapStudents] = useState(
+    defaultValues.swap_students,
+  );
+  const [colorOptions, setColorOptions] = useState(defaultValues.colorOptions);
+  const [list, setList] = useState(defaultValues.list);
+  const [class_name, setClassName] = useState(defaultValues.class_name);
+  const [date_time, setDateTime] = useState(defaultValues.date_time);
+
+  const [auto_seats, setAutoSeats] = useState(defaultValues.auto_seats);
+  const [numRows, setNumRows] = useState(defaultValues.numRows);
+  const [seats_per_row, setSeatsPerRow] = useState(defaultValues.seats_per_row);
+  const [min_seats_per_row, setMinSeatsPerRow] = useState(
+    defaultValues.min_seats_per_row,
+  );
+  const [reverseLayout, setReverseLayout] = useState(
+    defaultValues.reverseLayout,
+  );
+  const [extraLines, setExtraLines] = useState(defaultValues.extraLines);
+  const [hasGradeGrid, setHasGradeGrid] = useState(defaultValues.hasGradeGrid);
+  const [colorList, setColorList] = useState(defaultValues.colorList);
+
+  const [seatOverrides, setSeatOverrides] = useState({});
+
   const [saved_classes, setSavedClasses] = useState([]);
   const [showInstructions, setShowInstructions] = useState(false);
   const [showClassList, setShowClassList] = useState(false);
-  const [reverseLayout, setReverseLayout] = useState(true);
   const [settingsAnchor, setSettingsAnchor] = useState(undefined);
   const [colorListAnchor, setColorListAnchor] = useState(undefined);
-  const [extraLines, setExtraLines] = useState(5);
-  const [hasGradeGrid, setHasGradeGrid] = useState(true);
-  const [colorList, setColorList] = useState(defaultColors);
-
-  const [seatOverrides, setSeatOverrides] = useState({});
 
   const printing = useMediaQuery("@media print");
 
@@ -98,7 +124,19 @@ const App = () => {
           date_time,
           list,
           boy_girl: false,
-        })
+
+          swap_students,
+          colorOptions,
+          auto_seats,
+          numRows,
+          seats_per_row,
+          min_seats_per_row,
+          reverseLayout,
+          extraLines,
+          hasGradeGrid,
+          colorList,
+          seatOverrides,
+        }),
       );
       updateSavedClasses();
     }
@@ -110,14 +148,29 @@ const App = () => {
     if (auto_seats) {
       const students = list?.split(/\r?\n/) || [];
       setSeatsPerRow(
-        Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
+        Math.max(Math.ceil(students.length / numRows), min_seats_per_row),
       );
     }
 
-    setClassName(newState?.class_name || "");
-    setDateTime(newState?.date_time || "");
-    setList(newState?.list || "");
-    setBoyGirl(false);
+    setClassName(newState?.class_name ?? defaultValues.class_name);
+    setDateTime(newState?.date_time ?? defaultValues.date_time);
+    setList(newState?.list ?? defaultValues.list);
+    setBoyGirl(newState?.boy_girl ?? defaultValues.boy_girl);
+
+    setSwapStudents(newState?.swap_students ?? defaultValues.swap_students);
+    setColorOptions(newState?.colorOptions ?? defaultValues.colorOptions);
+    setAutoSeats(newState?.auto_seats ?? defaultValues.auto_seats);
+    setNumRows(newState?.numRows ?? defaultValues.numRows);
+    setSeatsPerRow(newState?.seats_per_row ?? defaultValues.seats_per_row);
+    setMinSeatsPerRow(
+      newState?.min_seats_per_row ?? defaultValues.min_seats_per_row,
+    );
+    setReverseLayout(newState?.reverseLayout ?? defaultValues.reverseLayout);
+    setExtraLines(newState?.extraLines ?? defaultValues.extraLines);
+    setHasGradeGrid(newState?.hasGradeGrid ?? defaultValues.hasGradeGrid);
+    setColorList(newState?.colorList ?? defaultValues.colorList);
+    setSeatOverrides(newState?.seatOverrides ?? defaultValues.seatOverrides);
+
     setShowClassList(false);
   };
 
@@ -139,10 +192,10 @@ const App = () => {
     if (boy_girl && randomize) {
       students = students.filter((s) => s[0]);
       let boys = students.filter(
-        (student) => !student[1] || student[1].match(/^M/i)
+        (student) => !student[1] || student[1].match(/^M/i),
       );
       let girls = students.filter(
-        (student) => student[1] && student[1].match(/^F/i)
+        (student) => student[1] && student[1].match(/^F/i),
       );
 
       if (randomize) {
@@ -188,12 +241,12 @@ const App = () => {
         //.filter(s => s.length > 1 && s[0].length)
         .map((s) => s.join(";")) //${s[0] || ''};${s[1] || ''}`)
         .join("\n")
-        .replace(/\n\n+$/, "")
+        .replace(/\n\n+$/, ""),
     );
 
     if (auto_seats) {
       setSeatsPerRow(
-        Math.max(Math.ceil(students.length / numRows), min_seats_per_row)
+        Math.max(Math.ceil(students.length / numRows), min_seats_per_row),
       );
     }
   };
@@ -216,7 +269,7 @@ const App = () => {
 
       setList(students.map((s) => s.join(";")).join("\n"));
     },
-    [list, swap_students, setList]
+    [list, swap_students, setList],
   );
 
   const updateSavedClasses = () => {
@@ -572,7 +625,7 @@ const App = () => {
                   color="primary"
                   onClick={(e) =>
                     setSettingsAnchor(
-                      settingsAnchor ? undefined : e.currentTarget
+                      settingsAnchor ? undefined : e.currentTarget,
                     )
                   }
                 >
@@ -582,7 +635,7 @@ const App = () => {
                   color="primary"
                   onClick={(e) =>
                     setColorListAnchor(
-                      colorListAnchor ? undefined : e.currentTarget
+                      colorListAnchor ? undefined : e.currentTarget,
                     )
                   }
                 >
@@ -599,7 +652,11 @@ const App = () => {
                 >
                   Randomize
                 </Button>
-                <Button variant="contained" onClick={() => saveClass()}>
+                <Button
+                  variant="contained"
+                  onClick={() => saveClass()}
+                  disabled={!class_name.length}
+                >
                   Save
                 </Button>
               </div>
