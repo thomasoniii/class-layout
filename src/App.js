@@ -170,6 +170,8 @@ const App = () => {
     setHasGradeGrid(newState?.hasGradeGrid ?? defaultValues.hasGradeGrid);
     setColorList(newState?.colorList ?? defaultValues.colorList);
     setSeatOverrides(newState?.seatOverrides ?? defaultValues.seatOverrides);
+
+    setShowClassList(false);
   };
 
   const deleteClass = (cn) => {
@@ -650,7 +652,11 @@ const App = () => {
                 >
                   Randomize
                 </Button>
-                <Button variant="contained" onClick={() => saveClass()}>
+                <Button
+                  variant="contained"
+                  onClick={() => saveClass()}
+                  disabled={!class_name.length}
+                >
                   Save
                 </Button>
               </div>
