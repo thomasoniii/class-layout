@@ -550,7 +550,7 @@ const App = () => {
         <div className="App">
           <Box sx={{ p: printing ? 0 : 2 }}>
             <div className="header-grid">
-              <div>Class:</div>
+              {/* <div>Class:</div> */}
               <div>
                 <span className="ui-control">
                   <TextField
@@ -566,7 +566,7 @@ const App = () => {
                   {class_name}
                 </div>
               </div>
-              <div>Time/Days:</div>
+              {/* <div>Time/Days:</div> */}
               <div>
                 <span className="ui-control">
                   <TextField
