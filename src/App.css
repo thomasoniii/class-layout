@@ -153,4 +153,8 @@ li.last-student {
   .student-list {
     display: none;
   }
+
+  .header-grid {
+    margin-top: 3rem;
+  }
 }
